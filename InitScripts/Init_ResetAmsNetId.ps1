@@ -1,0 +1,1 @@
+Write-Host "Starting reset of AMS Net ID..."
