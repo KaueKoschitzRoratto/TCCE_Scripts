@@ -1,6 +1,10 @@
-Write-Host "Starting configuratio of Mosquitto message broker..."
+Write-Host "Starting configuration of Mosquitto message broker..."
 
-$hostname = $args[0]
+$caPath = "C:\CA"
+$caCert = "rootCA.pem"
+
+$serverCert = "server.pem"
+$serverKey = "server.key"
 
 $mosquittoPath = "C:\Program Files (x86)\mosquitto"
 $mosquittoConf = "mosquitto.conf"
@@ -9,17 +13,10 @@ listener 8883 `r`n
 allow_anonymous true `r`n
 require_certificate true `r`n
 `r`n
-cafile C:\CA\rootCA.pem `r`n
-certfile C:\CA\server.pem `r`n
-keyfile C:\CA\server.key `r`n
+cafile $caPath\$caCert `r`n
+certfile $caPath\$serverCert `r`n
+keyfile $caPath\$serverKey `r`n
 "@
-
-$caPath = "C:\CA"
-$caCert = "rootCA.pem"
-$caKey = "rootCA.key"
-
-$serverCert = "server.pem"
-$serverKey = "server.key"
 
 # Remove any existing configuration file but create a backup first
 if (Test-Path -Path "$mosquittoPath\$mosquittoConf") {
@@ -30,5 +27,4 @@ if (Test-Path -Path "$mosquittoPath\$mosquittoConf") {
 # Create new configuration file
 New-Item -Path "$mosquittoPath\$mosquittoConf" -Value $mosquittoConfContent
 
-# Restart Mosquitto service
-Restart-Service -Name "mosquitto"
+# Restart of mosquitto service required -> will be performed by reboot anyway
