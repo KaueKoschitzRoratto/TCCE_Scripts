@@ -16,11 +16,10 @@ $tcInstallDir = $tcInstallDirTemp.TwinCATDir
 $tcFunctionsInstallDir = $tcInstallDir + "Functions"
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Server"
 $configPath = $baseInstallPath + "\TcUaServerConfig.xml"
-
-# Generate path for new PKI directories
-$newPkiPathServer = $baseInstallPath + "\pki"
-$newPkiPathBkpServer = $baseInstallPath + "\pki.bkp"
-$newPkiPathUser = $baseInstallPath + "\pkiuser"
+$pkiPathServer = $baseInstallPath + "\pki"
+$pkiPathBkpServer = $baseInstallPath + "\pki.bkp"
+$pkiOwnCert = $pkiPathServer + "\CA\own\certs\Beckhoff_OpcUaServer.der"
+$pkiOwnPrivate = $pkiPathServer + "\CA\own\private\Beckhoff_OpcUaServer.pem"
 
 # Stop TcOpcUaServer.exe
 Stop-Process -Name TcOpcUaServer -Force
@@ -43,7 +42,15 @@ $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.CertificateStore.Certifica
 # Save config file
 $xmlContent.Save($configPath)
 
-# Remove PKI directory
-Remove-Item -Recurse -Force $newPkiPathServer
-Remove-Item -Recurse -Force $newPkiPathBkpServer
-Remove-Item -Recurse -Force $newPkiPathUser
+# Remove PKI.bkp directory
+if (Test-Path -Path $pkiPathBkpServer) {
+    Remove-Item -Recurse -Force $pkiPathBkpServer
+}
+
+# Remove own server certificate because it needs to be re-created
+if (Test-Path -Path $pkiOwnCert) {
+    Remove-Item -Force $pkiOwnCert
+}
+if (Test-Path -Path $pkiOwnPrivate) {
+    Remove-Item -Force $pkiOwnPrivate
+}

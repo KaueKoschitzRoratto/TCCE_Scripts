@@ -2,8 +2,6 @@ Write-Host "Starting configuration of TwinCAT OPC UA Gateway..."
 
 $hostname = $args[0]
 
-Write-Host "Configuring Gateway for hostname " + $hostname
-
 $baseRegKey32 = "\SOFTWARE\Beckhoff\TwinCAT3"
 $baseRegKey64 = "\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT3"
 $serverName = "TcOpcUaGateway@" + $hostname
@@ -18,11 +16,9 @@ $tcInstallDir = $tcInstallDirTemp.TwinCATDir
 $tcFunctionsInstallDir = $tcInstallDir + "Functions"
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Gateway"
 $configPath = $baseInstallPath + "\bin\uagateway.config.xml"
-
-# Generate path for new PKI directories
-$newPkiPathServer = $baseInstallPath + "\pkiserver"
-$newPkiPathClient = $baseInstallPath + "\pkiclient"
-$newPkiPathUser = $baseInstallPath + "\pkiuser"
+$pkiPathServer = $baseInstallPath + "\pkiserver"
+$pkiOwnCert = $pkiPathServer + "\own\certs\uagateway.der"
+$pkiOwnPrivate = $pkiPathServer + "\own\private\uagateway.pem"
 
 # Load XML
 [xml] $xmlContent = Get-Content -Path $configPath
@@ -46,10 +42,13 @@ $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.Se
 # Save config file
 $xmlContent.Save($configPath)
 
-# Remove PKI directory
-Remove-Item -Recurse -Force $newPkiPathServer
-Remove-Item -Recurse -Force $newPkiPathClient
-Remove-Item -Recurse -Force $newPkiPathUser
+# Remove own server certificate because it needs to be re-created
+if (Test-Path -Path $pkiOwnCert) {
+    Remove-Item -Force $pkiOwnCert
+}
+if (Test-Path -Path $pkiOwnPrivate) {
+    Remove-Item -Force $pkiOwnPrivate
+}
 
 # Restart UA Gateway service
 Restart-Service -Name "UaGateway"

@@ -1,3 +1,5 @@
+Add-Type -AssemblyName System.Windows.Forms
+
 # Retrieve public hostname of instance and store in registry to detect if InitScript needs to run again (Clone)
 $token = Invoke-RestMethod -Headers @{"X-aws-ec2-metadata-token-ttl-seconds" = "21600"} -Method PUT -Uri http://169.254.169.254/latest/api/token
 $hostname = Invoke-RestMethod -Headers @{"X-aws-ec2-metadata-token" = $token} -Method GET -Uri http://169.254.169.254/latest/meta-data/public-hostname
@@ -20,11 +22,14 @@ else {
     if ($hostnameReg.Hostname -ne $hostname) {
         Set-ItemProperty -Path $baseRegKey -Name $regKeyPropertyName -Value $hostname
         $init = $true
-        }
+    }
 }
 
 if($init)
 {
+    # Warn user about init scripts
+    [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected, which requires the one-time execution of an initialization script. Please click on OK to continue and do not close the command prompt window. A separate message box will notify you once the script has been executed.",“TwinCAT Cloud Engineering init script“,0)
+
     # Configure TwinCAT OPC UA Server
     Invoke-Expression ".\Init_ConfigureTcOpcUaServer.ps1 $hostname"
 
@@ -43,6 +48,10 @@ if($init)
     # Reset AMS Net ID
     Invoke-Expression ".\Init_ResetAmsNetId.ps1"
 
-    # Start TwinCAT Cloud Engineering OPC UA Server
-    Invoke-Expression ".\Init_StartCloudEngineeringUaServer.ps1"
+    # Configure TwinCAT Cloud Engineering OPC UA Server
+    Invoke-Expression ".\Init_ConfigureCloudEngineeringUaServer.ps1"
+
+    # Restart Windows
+    [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...",“TwinCAT Cloud Engineering init script“,0)
+    Restart-Computer
 }
