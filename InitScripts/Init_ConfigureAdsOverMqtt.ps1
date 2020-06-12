@@ -1,13 +1,5 @@
 Write-Host "Starting configuration of TwinCAT System Service for ADS-over-MQTT..."
 
-$caPath = "C:\CA"
-$caCert = "rootCA.pem"
-
-$clientCert = "TwinCAT_XAE.pem"
-$clientKey = "TwinCAT_XAE.key"
-
-$tcRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
-$tcRoutesName = "AdsOverMqtt.xml"
 $tcRoutesContent = @"
 <?xml version="1.0" encoding="ISO-8859-1"?> `r`n
 <TcConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2015/12/TcConfig"> `r`n
@@ -17,8 +9,8 @@ $tcRoutesContent = @"
         <Topic>VirtualAmsNetwork1</Topic> `r`n
         <Tls> `r`n
             <Ca>$caPath\$caCert</Ca> `r`n
-            <Cert>$caPath\$clientCert</Cert> `r`n
-            <Key>$caPath\$clientKey</Key> `r`n
+            <Cert>$caPath\$tcSysSrvAdsMqttClientCert</Cert> `r`n
+            <Key>$caPath\$tcSysSrvAdsMqttClientKey</Key> `r`n
         </Tls> `r`n
     </Mqtt> `r`n
 </RemoteConnections> `r`n
@@ -26,12 +18,12 @@ $tcRoutesContent = @"
 "@
 
 # Remove any existing ADS-over-MQTT routes file but create a backup first
-if (Test-Path -Path "$tcRoutesPath\$tcRoutesName") {
-    Copy-Item -Path "$tcRoutesPath\$tcRoutesName" -Destination "$tcRoutesPath\$tcRoutesName.bak"
-    Remove-Item -Recurse -Force "$tcRoutesPath\$tcRoutesName"
+if (Test-Path -Path "$tcSysSrvRoutesPath\$tcSysSrvRoutesName") {
+    Copy-Item -Path "$tcSysSrvRoutesPath\$tcSysSrvRoutesName" -Destination "$tcSysSrvRoutesPath\$tcSysSrvRoutesName.bak"
+    Remove-Item -Recurse -Force "$tcSysSrvRoutesPath\$tcSysSrvRoutesName"
 }
 
 # Create new routes file for ADS-over-MQTT
-New-Item -Path "$tcRoutesPath\$tcRoutesName" -Value $tcRoutesContent
+New-Item -Path "$tcSysSrvRoutesPath\$tcSysSrvRoutesName" -Value $tcRoutesContent
 
 # Restart of TcSysSrv service required -> will be performed by reboot anyway

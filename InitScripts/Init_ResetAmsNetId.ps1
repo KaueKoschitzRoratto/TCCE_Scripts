@@ -1,11 +1,7 @@
 Write-Host "Starting reset of AMS Net ID..."
 
-$regKeyTc = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT3"
-$regKeyTcSystem = $regKeyTc + "\System"
-$regKeyTcAmsNetId = "AmsNetId"
-
 # Reading current AmsNetId from Windows Registry
-$amsNetId = Get-ItemProperty -Path $regKeyTcSystem -Name $regKeyTcAmsNetId
+$amsNetId = Get-ItemProperty -Path $regKeyTcSystem -Name $regKeyPropertyAmsNetId
 
 # Reading currently allocated IP address from NIC
 $ipAddr = Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias "Ethernet"
@@ -19,7 +15,7 @@ $amsNetId.AmsNetId[0] = $ipAddrArr[0]
 $amsNetId.AmsNetId[1] = $ipAddrArr[1]
 $amsNetId.AmsNetId[2] = $ipAddrArr[2]
 $amsNetId.AmsNetId[3] = $ipAddrArr[3]
-Set-ItemProperty -Path $regKeyTcSystem -Name $regKeyTcAmsNetId -Value $amsNetId.AmsNetId
+Set-ItemProperty -Path $regKeyTcSystem -Name $regKeyPropertyAmsNetId -Value $amsNetId.AmsNetId
 
 # Starting TwinCAT System Service
 Start-Service -Name "TcSysSrv"

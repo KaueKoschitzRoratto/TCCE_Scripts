@@ -1,26 +1,22 @@
 Add-Type -AssemblyName System.Windows.Forms
 
+# Load global settings
+Invoke-Expression ".\Init_Settings.ps1"
+
 # Retrieve public hostname of instance and store in registry to detect if InitScript needs to run again (Clone)
 $token = Invoke-RestMethod -Headers @{"X-aws-ec2-metadata-token-ttl-seconds" = "21600"} -Method PUT -Uri http://169.254.169.254/latest/api/token
 $hostname = Invoke-RestMethod -Headers @{"X-aws-ec2-metadata-token" = $token} -Method GET -Uri http://169.254.169.254/latest/meta-data/public-hostname
 
-# Check if reg key for TwinCAT Cloud Engineering exists
-$regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
-$regKeyName = "TwinCAT Cloud Engineering"
-$regKeyPropertyName = "Hostname"
-$baseRegKey = $regKeyBeckhoff + $regKeyName
-$regKeyExists = Test-Path $baseRegKey
-
 $init = $false
 
-if($regKeyExists -eq $false) {
-    New-Item -Path $regKeyBeckhoff -Name $regKeyName
-    New-ItemProperty -Path $baseRegKey -Name $regKeyPropertyName -Value $hostname
+if (-Not (Test-Path $baseRegKey)) {
+    New-Item -Path $regKeyBeckhoff -Name $regKeyCloudEng
+    New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
 }
 else {
-    $hostnameReg = Get-ItemProperty -Path $baseRegKey -Name $regKeyPropertyName
+    $hostnameReg = Get-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname
     if ($hostnameReg.Hostname -ne $hostname) {
-        Set-ItemProperty -Path $baseRegKey -Name $regKeyPropertyName -Value $hostname
+        Set-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
         $init = $true
     }
 }

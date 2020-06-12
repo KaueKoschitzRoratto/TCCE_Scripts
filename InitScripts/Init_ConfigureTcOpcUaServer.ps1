@@ -2,18 +2,9 @@ Write-Host "Starting configuration of TwinCAT OPC UA Server..."
 
 $hostname = $args[0]
 
-$baseRegKey32 = "\SOFTWARE\Beckhoff\TwinCAT3"
-$baseRegKey64 = "\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT3"
 $serverName = "TcOpcUaServer@" + $hostname
 $serverUrl = "opc.tcp://" + $hostname + ":4841"
 
-# Retrieve TwinCAT installation directory from Windows Registry
-$tcInstallDirTemp = Get-ItemProperty -Path HKLM:$baseRegKey64
-if($tcInstallDirTemp -eq $null) {
- $tcInstallDirTemp = Get-ItemProperty -Path HKLM:$baseRegKey32
-}
-$tcInstallDir = $tcInstallDirTemp.TwinCATDir
-$tcFunctionsInstallDir = $tcInstallDir + "Functions"
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Server"
 $configPath = $baseInstallPath + "\TcUaServerConfig.xml"
 $pkiPathServer = $baseInstallPath + "\pki"
