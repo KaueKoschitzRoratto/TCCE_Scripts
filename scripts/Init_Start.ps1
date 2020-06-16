@@ -24,3 +24,6 @@ Invoke-Expression ".\scripts\Init_ConfigureCloudEngineeringUaServer.ps1"
 
 # Reset AMS Net ID
 Invoke-Expression ".\scripts\Init_ResetAmsNetId.ps1"
+
+# Create user account for TcOpcUaGateway
+Invoke-Expression ".\scripts\Init_CreateUserTcOpcUaGateway.ps1"
