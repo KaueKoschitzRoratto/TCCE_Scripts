@@ -32,11 +32,6 @@ if($init)
     # Warn user about init scripts
     [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected, which requires the one-time execution of an initialization script. Please click on OK to continue and do not close the command prompt window. A separate message box will notify you once the script has been executed.",“TwinCAT Cloud Engineering init script“,0)
 
-    # Pulling latest version of init scripts from Github
-    Write-Host "Pulling latest version of init scripts from Github..."
-    cd C:\git\TCCE_InitScripts
-    git pull
-
     # Start initialization scripts
     Invoke-Expression ".\scripts\Init_Start.ps1"
 
