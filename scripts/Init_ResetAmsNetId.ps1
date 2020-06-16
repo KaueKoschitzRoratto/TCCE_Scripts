@@ -3,9 +3,8 @@ Write-Host "Starting reset of AMS Net ID..."
 # Reading current AmsNetId from Windows Registry
 $amsNetId = Get-ItemProperty -Path $regKeyTcSystem -Name $regKeyPropertyAmsNetId
 
-# Reading currently allocated IP address from NIC
-$ipAddr = Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias "Ethernet"
-$ipAddrArr = $ipAddr.IPAddress.Split(".")
+# Using public IP from EC2 meta data service
+$ipAddrArr = $publicIp.IPAddress.Split(".")
 
 # Stopping TwinCAT System Service and all dependencies
 Stop-Service -Name "TcSysSrv"
