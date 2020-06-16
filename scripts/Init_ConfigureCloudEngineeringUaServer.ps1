@@ -1,7 +1,7 @@
-Write-Host "Starting reset of AMS Net ID..."
+Write-Host "Starting configuration of TcCloudEngineeringUaServer..."
 
 # Set service startup type to Automatic
-Set-Service -Name "TwinCAT Cloud Control UA Server" -StartupType Automatic
+Set-Service -Name "TcCloudEngineeringUaServer" -StartupType Automatic
 
 # Start service
-Start-Service -Name "TwinCAT Cloud Control UA Server"
+Start-Service -Name "TcCloudEngineeringUaServer"
