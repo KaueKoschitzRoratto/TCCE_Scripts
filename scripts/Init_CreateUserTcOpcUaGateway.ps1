@@ -26,12 +26,12 @@ Password: $password `r`n
 Please store these credentials in a save location and delete this file.
 "@
 
-# Create new user account if it does not exist and add to group "Users"
+# Create new user account if it does not exist
 $account = Get-LocalUser -Name $username
-if ($account -eq $null) {
-    New-LocalUser -Name $username -FullName $username -Description "Account for TcOpcUaGateway user authentication" -Password $passwordSec
-    Add-LocalGroupMember -Group "Users" -Member $username
+if (-not ($account -eq $null)) {
+    Remove-LocalUser -Name $username
 }
+New-LocalUser -Name $username -FullName $username -Description "Account for TcOpcUaGateway user authentication" -Password $passwordSec
 
 # Store created user credentials on user's desktop as temporary note
 if (Test-Path -Path $credNotePath) {
