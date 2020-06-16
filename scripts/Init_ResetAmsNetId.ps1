@@ -4,7 +4,7 @@ Write-Host "Starting reset of AMS Net ID..."
 $amsNetId = Get-ItemProperty -Path $regKeyTcSystem -Name $regKeyPropertyAmsNetId
 
 # Using public IP from EC2 meta data service
-$ipAddrArr = $publicIp.IPAddress.Split(".")
+$ipAddrArr = $publicIp.Split(".")
 
 # Stopping TwinCAT System Service and all dependencies
 Stop-Service -Name "TcSysSrv"
