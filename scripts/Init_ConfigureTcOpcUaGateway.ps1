@@ -30,6 +30,15 @@ $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.Se
 # Change Cert DNSName
 $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.DNSName = $hostname
 
+# Disable anonymous auth
+$xmlContent.OpcServerConfig.UaServerConfig.UserIdentityTokens.EnableAnonymous = "false"
+
+# Disable cert auth
+$xmlContent.OpcServerConfig.UaServerConfig.UserIdentityTokens.EnableCertificate = "false"
+
+# Enable username/password auth
+$xmlContent.OpcServerConfig.UaServerConfig.UserIdentityTokens.EnableUserPw = "true"
+
 # Save config file
 $xmlContent.Save($configPath)
 
