@@ -16,11 +16,11 @@ $global:tcFunctionsInstallDir = $tcInstallDir + "\Functions"
 # TwinCAT System Service - ADS-over-MQTT
 $global:tcSysSrvRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
 $global:tcSysSrvRoutesName = "AdsOverMqtt.xml"
-$global:tcSysSrvAdsMqttClientCert = "TwinCAT_XAE.pem"
-$global:tcSysSrvAdsMqttClientKey = "TwinCAT_XAE.key"
+$global:tcSysSrvAdsMqttClientCert = "AdsOverMqtt.pem"
+$global:tcSysSrvAdsMqttClientKey = "AdsOverMqtt.key"
 
 # Mosquitto
 $global:mosquittoPath = "C:\Program Files (x86)\mosquitto"
 $global:mosquittoConf = "mosquitto.conf"
-$global:mosquittoServerCert = "server.pem"
-$global:mosquittoServerKey = "server.key"
+$global:mosquittoServerCert = "mosquitto.pem"
+$global:mosquittoServerKey = "mosquitto.key"

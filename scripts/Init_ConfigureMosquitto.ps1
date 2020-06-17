@@ -1,13 +1,13 @@
 Write-Host "Starting configuration of Mosquitto message broker..."
 
 $mosquittoConfContent = @"
-listener 8883 `r`n
-allow_anonymous true `r`n
-require_certificate true `r`n
-`r`n
-cafile $caPath\$caCert `r`n
-certfile $caPath\$mosquittoServerCert `r`n
-keyfile $caPath\$mosquittoServerKey `r`n
+listener 8883`n
+allow_anonymous true`n
+require_certificate true`n
+`n
+cafile $caPath\$caCert`n
+certfile $caPath\$mosquittoServerCert`n
+keyfile $caPath\$mosquittoServerKey`n
 "@
 
 # Remove any existing configuration file but create a backup first

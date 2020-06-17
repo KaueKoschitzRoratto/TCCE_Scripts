@@ -20,9 +20,9 @@ $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
 
 $credNotePath = "C:\Users\Administrator\Desktop\Readme.txt"
 $credNoteContent = @"
-User credentials for TwinCAT Cloud Engineering OPC UA Server: `r`n
-Username: $username `r`n
-Password: $password `r`n
+User credentials for TwinCAT Cloud Engineering OPC UA Server:`n
+Username: $username`n
+Password: $password`n
 Please store these credentials in a save location and delete this file.
 "@
 

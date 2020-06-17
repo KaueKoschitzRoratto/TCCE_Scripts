@@ -14,7 +14,7 @@ if (Test-Path -Path "$caPath\$mosquittoServerKey") {
 Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "genrsa -out $mosquittoServerKey 2048"
 
 # Generate self-signed certificate
-Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "req -new -sha256 -key $mosquittoServerKey -out $mosquittoServerCert -subj /C=DE/ST=NRW/L=Verl/O=BeckhoffAutomation/OU=ServerCert/CN=$hostname"
+Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "req -new -sha256 -key $mosquittoServerKey -out $mosquittoServerCert -subj /C=DE/ST=NRW/L=Verl/O=BeckhoffAutomation/OU=ServerCert/CN=$publicIp"
 
 # Sign self-signed certificate by certificate authority
 Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "x509 -req -in $mosquittoServerCert -CA $caCert -CAkey $caKey -CAcreateserial -out $mosquittoServerCert -days 7300 -sha256"
