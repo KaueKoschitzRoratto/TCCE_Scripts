@@ -1,3 +1,6 @@
+# Create registry keys
+Invoke-Expression ".\scripts\Init_CreateRegKeys.ps1"
+
 # Create Certificate Authority
 Invoke-Expression ".\scripts\Init_CreateCertificateAuthority.ps1"
 

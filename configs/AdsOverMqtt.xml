@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<TcConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2015/12/TcConfig"> 
+<RemoteConnections> 
+    <Mqtt> 
+        <Address Port="%port%">%hostname%</Address> 
+        <Topic>VirtualAmsNetwork1</Topic> 
+        <Tls> 
+            <Ca>%caCertPath%</Ca> 
+            <Cert>%clientCertPath%</Cert> 
+            <Key>%clientKeyPath%</Key> 
+        </Tls> 
+    </Mqtt> 
+</RemoteConnections> 
+</TcConfig> 

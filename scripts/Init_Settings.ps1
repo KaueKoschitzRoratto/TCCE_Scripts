@@ -8,6 +8,8 @@ $global:regKeyTc = $regKeyBeckhoff + "\TwinCAT3"
 $global:regKeyTcSystem = $regKeyTc + "\System"
 $global:regKeyPropertyCaPath = "CaPath"
 $global:regKeyPropertyAmsNetId = "AmsNetId"
+$global:regKeyPropertyInitScriptsRepo = "InitScriptsRepoPath"
+$global:regKeyPropertyPublicIp = "PublicIp"
 
 # TwinCAT
 $global:tcInstallDir = "C:\TwinCAT"
@@ -24,3 +26,6 @@ $global:mosquittoPath = "C:\Program Files (x86)\mosquitto"
 $global:mosquittoConf = "mosquitto.conf"
 $global:mosquittoServerCert = "mosquitto.pem"
 $global:mosquittoServerKey = "mosquitto.key"
+
+# Repository paths
+$global:repoPathInitScripts = "C:\git\TCCE_InitScripts"

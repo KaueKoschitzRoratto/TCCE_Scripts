@@ -15,16 +15,18 @@ $global:regKeyPropertyHostname = "Hostname"
 $global:hostname = Invoke-RestMethod -Method GET -Uri http://169.254.169.254/latest/meta-data/public-hostname
 $global:publicIp = Invoke-RestMethod -Method GET -Uri http://169.254.169.254/latest/meta-data/public-ipv4
 
+# Check if initialization has to be started (new or cloned instance)
 $init = $false
 if (-Not (Test-Path $regKeyBase)) {
     New-Item -Path $regKeyBeckhoff -Name $regKeyCloudEng
     New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
+    $init = $true # reg key does not exist -> new instance -> init
 }
 else {
     $hostnameReg = Get-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname
     if ($hostnameReg.Hostname -ne $hostname) {
         Set-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
-        $init = $true
+        $init = $true # hostname differs -> cloned instance -> init
     }
 }
 
