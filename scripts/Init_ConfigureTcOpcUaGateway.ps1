@@ -2,8 +2,8 @@ Write-Host "Starting configuration of TwinCAT OPC UA Gateway..."
 
 $hostname = $args[0]
 
-$serverName = "TcOpcUaGateway@" + $publicIp
-$serverUrl = "opc.tcp://" + $publicIp + ":4840"
+$serverName = "TcOpcUaGateway@" + $publicIp.ToString()
+$serverUrl = "opc.tcp://" + $publicIp.ToString() + ":4840"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Gateway"
 $configPath = $baseInstallPath + "\bin\uagateway.config.xml"
@@ -22,7 +22,7 @@ $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.Url = $serverUrl
 $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.StackUrl = $serverUrl
 
 # Change Cert CommonName
-$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.CommonName = $publicIp
+$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.CommonName = $publicIp.ToString()
 
 # Change Cert DomainComponent
 $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.DomainComponent = $hostname

@@ -13,8 +13,3 @@ Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirector
 
 # Generate certificate authority certificate
 Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "req -x509 -new -nodes -key $caKey -out $caCert -sha256 -days 18250 -subj /C=DE/ST=NRW/L=Verl/O=BeckhoffAutomation/OU=ServerCert/CN=TcCloudEngineeringCA"
-
-# Create registry property to store CA path
-if(Test-Path -Path "$regKeyBase") {
-    New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyCaPath -Value $caPath
-}
