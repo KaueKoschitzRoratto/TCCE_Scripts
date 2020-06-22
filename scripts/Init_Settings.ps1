@@ -22,7 +22,7 @@ $global:tcSysSrvAdsMqttClientCert = "AdsOverMqtt.pem"
 $global:tcSysSrvAdsMqttClientKey = "AdsOverMqtt.key"
 
 # Mosquitto
-$global:mosquittoPath = "C:\Program Files (x86)\mosquitto"
+$global:mosquittoPath = "C:\Program Files\mosquitto"
 $global:mosquittoConf = "mosquitto.conf"
 $global:mosquittoServerCert = "mosquitto.pem"
 $global:mosquittoServerKey = "mosquitto.key"
