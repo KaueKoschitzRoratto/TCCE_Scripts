@@ -30,3 +30,6 @@ Invoke-Expression ".\scripts\Init_ResetAmsNetId.ps1"
 
 # Create user account for TcOpcUaGateway
 Invoke-Expression ".\scripts\Init_CreateUserTcOpcUaGateway.ps1"
+
+# Create user account for SSH access
+Invoke-Expression ".\scripts\Init_CreateUserSsh.ps1"
