@@ -26,12 +26,12 @@ if (-not ($account -eq $null)) {
 New-LocalUser -Name $username -FullName $username -Description "Account for TcOpcUaGateway user authentication" -Password $passwordSec
 
 # Store created user credentials on user's desktop as temporary note
-if (-not (Test-Path -Path "$readmePath\$readmeFile")) {
-  Copy-Item -Path "$repoPathInitScripts\configs\$readmeFile" -Destination "$readmePath\$readmeFile"
+if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
+  Copy-Item -Path "$repoPathInitScripts\configs\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
 }
-$readmeContent = Get-Content -Path "$readmePath\$readmeFile" -Raw
+$readmeContent = Get-Content -Path "$templateReadmePath\$templateReadmeFile" -Raw
 $readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
 $readmeContent = $readmeContent.Replace("%usernameOpcUa%", $username)
 $readmeContent = $readmeContent.Replace("%passwordOpcUa%", $password)
 
-Set-Content -Path $readmePath\$readmeFile -Value $readmeContent
+Set-Content -Path $templateReadmePath\$templateReadmeFile -Value $readmeContent

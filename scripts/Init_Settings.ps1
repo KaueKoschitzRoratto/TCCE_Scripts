@@ -3,8 +3,11 @@ $global:caPath = "C:\CA"
 $global:caClientCertsPath = $caPath + "\ClientCertificates"
 $global:caCert = "rootCA.pem"
 $global:caKey = "rootCA.key"
-$global:readmePath = "C:\Users\Administrator\Desktop"
-$global:readmeFile = "readme.txt"
+
+# Template files from configs directory
+$global:templateReadmePath = "C:\Users\Administrator\Desktop"
+$global:templateReadmeFile = "readme.txt"
+$global:templateRoutesFile = "AdsOverMqtt.xml"
 
 # Windows Registry
 $global:regKeyTc = $regKeyBeckhoff + "\TwinCAT3"
