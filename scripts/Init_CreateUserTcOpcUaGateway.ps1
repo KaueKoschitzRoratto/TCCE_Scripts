@@ -27,7 +27,7 @@ New-LocalUser -Name $username -FullName $username -Description "Account for TcOp
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$readmePath\$readmeFile")) {
-  Copy-Item -Path "..\.\configs\$readmeFile" -Destination "$readmePath\$readmeFile"
+  Copy-Item -Path "$repoPathInitScripts\configs\$readmeFile" -Destination "$readmePath\$readmeFile"
 }
 $readmeContent = Get-Content -Path "$readmePath\$readmeFile" -Raw
 $readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
