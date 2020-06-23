@@ -33,3 +33,5 @@ $readmeContent = Get-Content -Path "$readmePath\$readmeFile" -Raw
 $readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
 $readmeContent = $readmeContent.Replace("%usernameOpcUa%", $username)
 $readmeContent = $readmeContent.Replace("%passwordOpcUa%", $password)
+
+Set-Content -Path $readmePath\$readmeFile -Value $readmeContent

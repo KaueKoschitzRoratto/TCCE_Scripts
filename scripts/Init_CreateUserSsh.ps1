@@ -35,3 +35,5 @@ $readmeContent = Get-Content -Path "$readmePath\$readmeFile" -Raw
 $readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
 $readmeContent = $readmeContent.Replace("%usernameSsh%", $username)
 $readmeContent = $readmeContent.Replace("%passwordSsh%", $password)
+
+Set-Content -Path $readmePath\$readmeFile -Value $readmeContent
