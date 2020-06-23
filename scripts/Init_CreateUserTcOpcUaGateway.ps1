@@ -13,19 +13,10 @@ function Scramble-String([string]$inputString){
     return $outputString 
 }
 
-$username = "TcOpcUaGatewayAuth"
+$username = "Tcce_User_OpcUa"
 $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
 $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
-
-$credNotePath = "C:\Users\Administrator\Desktop\Readme.txt"
-$credNoteContent = @"
-User credentials for TwinCAT Cloud Engineering OPC UA Server:`n
-ServerUrl: opc.tcp://$publicIp`:4840`n
-Username: $username`n
-Password: $password`n
-Please store these credentials in a save location and delete this file.
-"@
 
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $username
@@ -35,7 +26,10 @@ if (-not ($account -eq $null)) {
 New-LocalUser -Name $username -FullName $username -Description "Account for TcOpcUaGateway user authentication" -Password $passwordSec
 
 # Store created user credentials on user's desktop as temporary note
-if (Test-Path -Path $credNotePath) {
-    Remove-Item -Path $credNotePath
+if (-not (Test-Path -Path "$readmePath\$readmeFile")) {
+  Copy-Item -Path "..\.\configs\$readmeFile" -Destination "$readmePath\$readmeFile"
 }
-New-Item -Path $credNotePath -Value $credNoteContent
+$readmeContent = Get-Content -Path "$readmePath\$readmeFile" -Raw
+$readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
+$readmeContent = $readmeContent.Replace("%usernameOpcUa%", $username)
+$readmeContent = $readmeContent.Replace("%passwordOpcUa%", $password)

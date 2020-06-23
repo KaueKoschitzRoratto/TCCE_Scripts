@@ -1,4 +1,4 @@
-Write-Host "Starting creation of user account for TcOpcUaGateway auth..."
+Write-Host "Starting creation of user account for SSH auth..."
 
 function Get-RandomCharacters($length, $characters) { 
     $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length } 
@@ -19,14 +19,6 @@ $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
 $groupName = "SSHUsers"
 
-$credNotePath = "C:\Users\Administrator\Desktop\Readme_SSH.txt"
-$credNoteContent = @"
-User credentials for SSH:`n
-Username: $username`n
-Password: $password`n
-Please store these credentials in a save location and delete this file.
-"@
-
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $username
 if (-not ($account -eq $null)) {
@@ -36,7 +28,10 @@ New-LocalUser -Name $username -FullName $username -Description "Account for SSH 
 Add-LocalGroupMember -Group $groupName -Member $username
 
 # Store created user credentials on user's desktop as temporary note
-if (Test-Path -Path $credNotePath) {
-    Remove-Item -Path $credNotePath
+if (-not (Test-Path -Path "$readmePath\$readmeFile")) {
+  Copy-Item -Path "..\.\configs\$readmeFile" -Destination "$readmePath\$readmeFile"
 }
-New-Item -Path $credNotePath -Value $credNoteContent
+$readmeContent = Get-Content -Path "$readmePath\$readmeFile" -Raw
+$readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
+$readmeContent = $readmeContent.Replace("%usernameSsh%", $username)
+$readmeContent = $readmeContent.Replace("%passwordSsh%", $password)

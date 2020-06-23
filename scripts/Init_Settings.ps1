@@ -2,6 +2,8 @@
 $global:caPath = "C:\CA"
 $global:caCert = "rootCA.pem"
 $global:caKey = "rootCA.key"
+$global:readmePath = "C:\Users\Administrator\Desktop"
+$global:readmeFile = "readme.txt"
 
 # Windows Registry
 $global:regKeyTc = $regKeyBeckhoff + "\TwinCAT3"
