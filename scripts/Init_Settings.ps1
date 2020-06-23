@@ -1,6 +1,6 @@
 # Global variables, which are used by each script
 $global:caPath = "C:\CA"
-$global:caClientCertsPath = $caPath + "\ClientCertificates"
+$global:caCertsPath = $caPath + "\certs"
 $global:caCert = "rootCA.pem"
 $global:caKey = "rootCA.key"
 
@@ -13,6 +13,7 @@ $global:templateRoutesFile = "AdsOverMqtt.xml"
 $global:regKeyTc = $regKeyBeckhoff + "\TwinCAT3"
 $global:regKeyTcSystem = $regKeyTc + "\System"
 $global:regKeyPropertyCaPath = "CaPath"
+$global:regKeyPropertyCaCertsPath = "CaCertsPath"
 $global:regKeyPropertyAmsNetId = "AmsNetId"
 $global:regKeyPropertyInitScriptsRepo = "InitScriptsRepoPath"
 $global:regKeyPropertyPublicIp = "PublicIp"

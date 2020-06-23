@@ -52,4 +52,11 @@ Remove-LocalUser -Name "Tcce_User_Ssh"
 
 ###################################################################################
 
+Write-Host "Step 6: Removing SSH key files..."
+
+$sshDirectory = "C:\ProgramData\ssh"
+Remove-Item -Path "$sshDirectory\ssh_host_*" -Force
+
+###################################################################################
+
 Read-Host "Finished !!"
