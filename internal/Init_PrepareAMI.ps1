@@ -50,3 +50,6 @@ Write-Host "Step 5: Removing user accounts..."
 Remove-LocalUser -Name "Tcce_User_OpcUa"
 Remove-LocalUser -Name "Tcce_User_Ssh"
 
+###################################################################################
+
+Read-Host "Finished !!"

@@ -1,9 +1,9 @@
 Write-Host "Starting creation of a local certificate authority..."
 
 # Create directory for CA
-if (-not (Test-Path -Path "$caPath")) {
-    New-Item -Path $caPath
-    New-Item -Path $caClientCertsPath
+if (-not (Test-Path -Path $caPath)) {
+    New-Item -Path $caPath -ItemType "directory"
+    New-Item -Path $caClientCertsPath -ItemType "directory"
 }
 
 # Generate certificate authority private key
