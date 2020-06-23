@@ -1,5 +1,6 @@
 # Global variables, which are used by each script
 $global:caPath = "C:\CA"
+$global:caClientCertsPath = $caPath + "\ClientCertificates"
 $global:caCert = "rootCA.pem"
 $global:caKey = "rootCA.key"
 $global:readmePath = "C:\Users\Administrator\Desktop"

@@ -1,11 +1,9 @@
 Write-Host "Starting creation of a local certificate authority..."
 
-# Remove any existing files
-if (Test-Path -Path "$caPath\$caCert") {
-    Remove-Item -Recurse -Force "$caPath\$caCert"
-}
-if (Test-Path -Path "$caPath\$caKey") {
-    Remove-Item -Recurse -Force "$caPath\$caKey"
+# Create directory for CA
+if (-not (Test-Path -Path "$caPath")) {
+    New-Item -Path $caPath
+    New-Item -Path $caClientCertsPath
 }
 
 # Generate certificate authority private key
