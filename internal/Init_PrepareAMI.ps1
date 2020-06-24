@@ -1,9 +1,12 @@
+$totalSteps = 6
+
 Write-Host "This script prepares the current virtual machine to be saved as an AMI"
 Write-Host "----------------------------------------------------------------------"
 
 ###################################################################################
 
-Write-Host "Step 1: Removing registry keys..."
+$currentStep = 1
+Write-Progress -Activity "AMI preparation" -Status "Removing registry keys" -PercentComplete ($currentStep / $totalSteps * 100)
 
 $regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
 $regKeyCloudEng = "TwinCAT Cloud Engineering"
@@ -15,7 +18,8 @@ if(Test-Path -Path "$regKeyBase") {
 
 ###################################################################################
 
-Write-Host "Step 2: Removing CA directory and content..."
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing CA directory and content" -PercentComplete ($currentStep / $totalSteps * 100)
 
 $caPath = "C:\CA"
 
@@ -25,7 +29,8 @@ if (Test-Path -Path $caPath) {
 
 ###################################################################################
 
-Write-Host "Step 3: Removing ADS-over-MQTT route..."
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing ADS-over-MQTT route" -PercentComplete ($currentStep / $totalSteps * 100)
 
 $tcSysSrvRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
 
@@ -35,7 +40,8 @@ if (Test-Path -Path $tcSysSrvRoutesPath) {
 
 ###################################################################################
 
-Write-Host "Step 4: Removing readme file from users's desktop..."
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing readme file from users's desktop" -PercentComplete ($currentStep / $totalSteps * 100)
 
 $readmePath = "C:\Users\Administrator\Desktop\readme.txt"
 
@@ -45,18 +51,20 @@ if (Test-Path -Path $readmePath) {
 
 ###################################################################################
 
-Write-Host "Step 5: Removing user accounts..."
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing user accounts" -PercentComplete ($currentStep / $totalSteps * 100)
 
 Remove-LocalUser -Name "Tcce_User_OpcUa"
 Remove-LocalUser -Name "Tcce_User_Ssh"
 
 ###################################################################################
 
-Write-Host "Step 6: Removing SSH key files..."
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing SSH key files" -PercentComplete ($currentStep / $totalSteps * 100)
 
 $sshDirectory = "C:\ProgramData\ssh"
 Remove-Item -Path "$sshDirectory\ssh_host_*" -Force
 
 ###################################################################################
 
-Read-Host "Finished !!"
+Read-Host "Finished AMI preparations!!"
