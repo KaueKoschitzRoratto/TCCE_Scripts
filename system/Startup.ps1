@@ -33,13 +33,13 @@ else {
 if($init)
 {
     # Load global settings
-    Invoke-Expression ".\scripts\Init_Settings.ps1"
+    Invoke-Expression ".\..\share\GlobalSettings.ps1"
     
     # Warn user about init scripts
     [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected, which requires the one-time execution of an initialization script. Please click on OK to continue and do not close the command prompt window. A separate message box will notify you once the script has been executed.",“TwinCAT Cloud Engineering init script“,0)
 
     # Start initialization scripts
-    Invoke-Expression ".\scripts\Init_Start.ps1"
+    Invoke-Expression ".\..\init\Init_Start.ps1"
 
     # Restart Windows
     [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...",“TwinCAT Cloud Engineering init script“,0)
