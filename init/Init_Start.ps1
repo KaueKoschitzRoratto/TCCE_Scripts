@@ -48,7 +48,7 @@ Invoke-Expression ".\init\Init_ConfigureCloudEngineeringUaServer.ps1"
 # Reset AMS Net ID
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Initialization" -Status "ResetAmsNetId" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression ".\scripts\Init_ResetAmsNetId.ps1"
+Invoke-Expression ".\init\Init_ResetAmsNetId.ps1"
 
 # Create user account for TcOpcUaGateway
 $currentStep = $currentStep + 1
