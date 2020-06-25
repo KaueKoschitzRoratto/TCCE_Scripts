@@ -2,7 +2,7 @@
 
 $totalSteps = 3
 
-Invoke-Expression ".\Init_Settings.ps1"
+Invoke-Expression "..\.\share\GlobalSettings.ps1"
 
 $currentStep = 1
 Write-Progress -Activity "Certificate Authority" -Status "Creating key" -PercentComplete ($currentStep / $totalSteps * 100)
@@ -15,3 +15,5 @@ Invoke-Expression -Command "openssl.exe req -new -sha256 -key $DestinationPath\d
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Certificate Authority" -Status "Signing certificate" -PercentComplete ($currentStep / $totalSteps * 100)
 Invoke-Expression -Command "openssl.exe x509 -req -in $DestinationPath\device.pem -CA $caPath\$caCert -CAkey $caPath\$caKey -CAcreateserial -out $DestinationPath\device.pem -days $Validity -sha256"
+
+Read-Host
