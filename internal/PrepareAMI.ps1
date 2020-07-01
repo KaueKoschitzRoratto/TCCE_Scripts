@@ -1,4 +1,4 @@
-$totalSteps = 7
+$totalSteps = 8
 
 Write-Host "This script prepares the current virtual machine to be saved as an AMI"
 Write-Host "----------------------------------------------------------------------"
@@ -72,6 +72,13 @@ $currentStep = $currentStep + 1
 Write-Progress -Activity "AMI preparation" -Status "Removing Agent service" -PercentComplete ($currentStep / $totalSteps * 100)
 
 Invoke-Expression -Command "sc.exe delete TcCloudEngineeringAgent"
+
+###################################################################################
+
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing OPC UA Server service" -PercentComplete ($currentStep / $totalSteps * 100)
+
+Invoke-Expression -Command "sc.exe delete TcCloudEngineeringUaServer"
 
 ###################################################################################
 

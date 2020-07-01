@@ -13,7 +13,16 @@ function Scramble-String([string]$inputString){
     return $outputString 
 }
 
+$serviceName = "TcCloudEngineeringUaServer"
+$executable = "TcCloudEngineeringUaServer.exe"
+
+$folderPath = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringUaServer"
+$description = "TwinCAT Cloud Engineering OPC UA Server"
+$displayName = "TwinCAT Cloud Engineering OPC UA Server"
+
 $username = "Tcce_User_OpcUa"
+$groupName = "Tcce_Group_OpcUa"
+
 $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
 $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
@@ -23,7 +32,18 @@ $account = Get-LocalUser -Name $username
 if (-not ($account -eq $null)) {
     Remove-LocalUser -Name $username
 }
-New-LocalUser -Name $username -FullName $username -Description "Account for TcOpcUaGateway user authentication" -Password $passwordSec
+New-LocalUser -Name $username -FullName $username -Description "Account for OPC UA user authentication and service registration" -Password $passwordSec
+Add-LocalGroupMember -Group $groupName -Member $username
+
+# User account has been created, now create Windows service
+$username = "$env:computername\$username"
+$psCredentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $passwordSec
+
+$exeName = "$executable"
+$exePath = "$folderPath\$exeName"
+
+New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
+Start-Service -Name $serviceName
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {

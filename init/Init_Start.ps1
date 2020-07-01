@@ -1,4 +1,4 @@
-$totalSteps = 13
+$totalSteps = 12
 
 # Create registry keys
 $currentStep = 1
@@ -40,11 +40,6 @@ $currentStep = $currentStep + 1
 Write-Progress -Activity "Initialization" -Status "ConfigureMosquitto" -PercentComplete ($currentStep / $totalSteps * 100)
 Invoke-Expression ".\init\Init_ConfigureMosquitto.ps1"
 
-# Configure TwinCAT Cloud Engineering OPC UA Server
-$currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "ConfigureCloudEngineeringUaServer" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression ".\init\Init_ConfigureCloudEngineeringUaServer.ps1"
-
 # Reset AMS Net ID
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Initialization" -Status "ResetAmsNetId" -PercentComplete ($currentStep / $totalSteps * 100)
@@ -52,8 +47,8 @@ Invoke-Expression ".\init\Init_ResetAmsNetId.ps1"
 
 # Create user account for TcOpcUaGateway
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateUserTcOpcUaGateway" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression ".\init\Init_CreateUserTcOpcUaGateway.ps1"
+Write-Progress -Activity "Initialization" -Status "CreateUserOpcUa" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression ".\init\Init_CreateUserOpcUa.ps1"
 
 # Create user account for SSH access
 $currentStep = $currentStep + 1
