@@ -1,4 +1,4 @@
-$totalSteps = 12
+$totalSteps = 13
 
 # Create registry keys
 $currentStep = 1
@@ -59,3 +59,8 @@ Invoke-Expression ".\init\Init_CreateUserTcOpcUaGateway.ps1"
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Initialization" -Status "CreateUserSsh" -PercentComplete ($currentStep / $totalSteps * 100)
 Invoke-Expression ".\init\Init_CreateUserSsh.ps1"
+
+# Create user account for Tcce Agent Windows service
+$currentStep = $currentStep + 1
+Write-Progress -Activity "Initialization" -Status "CreateUserAgent" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression ".\init\Init_CreateUserAgent.ps1"

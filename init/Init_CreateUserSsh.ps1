@@ -14,10 +14,10 @@ function Scramble-String([string]$inputString){
 }
 
 $username = "Tcce_User_SSH"
+$groupName = "Tcce_Group_SSH"
 $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
 $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
-$groupName = "SSHUsers"
 
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $username

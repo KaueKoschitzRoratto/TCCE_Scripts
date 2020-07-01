@@ -1,4 +1,4 @@
-$totalSteps = 6
+$totalSteps = 7
 
 Write-Host "This script prepares the current virtual machine to be saved as an AMI"
 Write-Host "----------------------------------------------------------------------"
@@ -56,6 +56,7 @@ Write-Progress -Activity "AMI preparation" -Status "Removing user accounts" -Per
 
 Remove-LocalUser -Name "Tcce_User_OpcUa"
 Remove-LocalUser -Name "Tcce_User_Ssh"
+Remove-LocalUser -Name "Tcce_User_Agent"
 
 ###################################################################################
 
@@ -64,6 +65,13 @@ Write-Progress -Activity "AMI preparation" -Status "Removing SSH key files" -Per
 
 $sshDirectory = "C:\ProgramData\ssh"
 Remove-Item -Path "$sshDirectory\ssh_host_*" -Force
+
+###################################################################################
+
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing Agent service" -PercentComplete ($currentStep / $totalSteps * 100)
+
+Invoke-Expression -Command "sc.exe delete TcCloudEngineeringAgent"
 
 ###################################################################################
 
