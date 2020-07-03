@@ -46,4 +46,3 @@ $exeName = "$executable"
 $exePath = "$folderPath\$exeName"
 
 New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
-Start-Service -Name $serviceName

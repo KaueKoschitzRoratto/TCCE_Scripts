@@ -70,14 +70,14 @@ Remove-Item -Path "$sshDirectory\ssh_host_*" -Force
 
 $currentStep = $currentStep + 1
 Write-Progress -Activity "AMI preparation" -Status "Removing Agent service" -PercentComplete ($currentStep / $totalSteps * 100)
-
+Stop-Service "TcCloudEngineeringAgent"
 Invoke-Expression -Command "sc.exe delete TcCloudEngineeringAgent"
 
 ###################################################################################
 
 $currentStep = $currentStep + 1
 Write-Progress -Activity "AMI preparation" -Status "Removing OPC UA Server service" -PercentComplete ($currentStep / $totalSteps * 100)
-
+Stop-Service "TcCloudEngineeringUaServer"
 Invoke-Expression -Command "sc.exe delete TcCloudEngineeringUaServer"
 
 ###################################################################################

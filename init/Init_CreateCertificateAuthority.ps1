@@ -6,6 +6,13 @@ if (-not (Test-Path -Path $caPath)) {
     New-Item -Path $caCertsPath -ItemType "directory"
 }
 
+# Give user group Tcce_Group_OpcUa read/write permissions on the CA directory
+$acl = Get-Acl $caPath
+$aclRuleArgs = "Tcce_Group_OpcUa", "Read,Write,ReadAndExecute", "ContainerInherit,ObjectInherit", "None", "Allow"
+$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule($aclRuleArgs)
+$acl.SetAccessRule($accessRule)
+$acl | Set-Acl $caPath
+
 # Generate certificate authority private key
 Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "genrsa -out $caKey 2048"
 

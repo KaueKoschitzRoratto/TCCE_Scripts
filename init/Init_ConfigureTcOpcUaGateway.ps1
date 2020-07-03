@@ -3,7 +3,7 @@ Write-Host "Starting configuration of TwinCAT OPC UA Gateway..."
 $hostname = $args[0]
 
 $serverName = "TcOpcUaGateway@" + $publicIp.ToString()
-$serverUrl = "opc.tcp://" + $hostname + ":4840"
+$serverUrl = "opc.tcp://" + $hostname + ":48050"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Gateway"
 $configPath = $baseInstallPath + "\bin\uagateway.config.xml"

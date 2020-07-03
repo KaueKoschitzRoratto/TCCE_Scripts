@@ -3,7 +3,7 @@ Write-Host "Starting configuration of TwinCAT OPC UA Server..."
 $hostname = $args[0]
 
 $serverName = "TcOpcUaServer@" + $hostname
-$serverUrl = "opc.tcp://" + $hostname + ":4841"
+$serverUrl = "opc.tcp://" + $hostname + ":4840"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Server"
 $configPath = $baseInstallPath + "\TcUaServerConfig.xml"
