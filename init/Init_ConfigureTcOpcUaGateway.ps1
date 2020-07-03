@@ -42,6 +42,158 @@ $xmlContent.OpcServerConfig.UaServerConfig.UserIdentityTokens.EnableCertificate 
 # Enable username/password auth
 $xmlContent.OpcServerConfig.UaServerConfig.UserIdentityTokens.EnableUserPw = "true"
 
+# Check if TcOpcUaServer and TcCloudEngineeringUaServer have been added correctly
+# /OpcServerConfig/Objects/OpcUa/OpcUaServer
+$tcUaServerFound = $false
+$tcceUaServerFound = $false
+$ua = $xmlContent.SelectSingleNode("/OpcServerConfig/Objects/OpcUa")
+$uaServers = $xmlContent.SelectNodes("/OpcServerConfig/Objects/OpcUa/OpcUaServer")
+if (-not($uaServers -eq $null)) {
+    foreach ($uaServer in $uaServers) {
+        if ($uaServer.Name -eq "TcOpcUaServer") {
+            $tcUaServerFound = $true
+            $uaServer.Url = "opc.tcp://localhost:4840"
+        }
+        if ($uaServer.Name -eq "TcCloudEngineeringUaServer") {
+            $tcceUaServerFound = $true
+            $uaServer.Url = "opc.tcp://localhost:4842"
+        }
+    }
+
+    if (-not $tcUaServerFound) {
+        $newNodeOpcUaServer = $xmlContent.CreateNode("element", "OpcUaServer", "")
+        $newNodeOpcUaServerName = $xmlContent.CreateNode("element", "Name", "")
+        $newNodeOpcUaServerName.InnerText = "TcOpcUaServer"
+        $newNodeOpcUaServerUrl = $xmlContent.CreateNode("element", "Url", "")
+        $newNodeOpcUaServerUrl.InnerText = "opc.tcp://localhost:4840"
+        $newNodeOpcUaServerSecPol = $xmlContent.CreateNode("element", "SecurityPolicy", "")
+        $newNodeOpcUaServerSecPol.InnerText = "None"
+        $newNodeOpcUaServerMsgMode = $xmlContent.CreateNode("element", "MessageSecurityMode", "")
+        $newNodeOpcUaServerMsgMode.InnerText = "None"
+        $newNodeOpcUaServerUserToken = $xmlContent.CreateNode("element", "UserTokenType", "")
+        $newNodeOpcUaServerUserToken.InnerText = "Anonymous"
+        $newNodeOpcUaServerUserName = $xmlContent.CreateNode("element", "UserName", "")
+        $newNodeOpcUaServerUserName.InnerText = ""
+        $newNodeOpcUaServerPwd = $xmlContent.CreateNode("element", "Password", "")
+        $newNodeOpcUaServerPwd.InnerText = ""
+        $newNodeOpcUaServerConnectFlag = $xmlContent.CreateNode("element", "ConnectFlag", "")
+        $newNodeOpcUaServerConnectFlag.InnerText = "true"
+        $newNodeOpcUaServerPrefix = $xmlContent.CreateNode("element", "NamespacePrefixOption", "")
+        $newNodeOpcUaServerPrefix.InnerText = "Name"
+
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUrl)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerSecPol)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerMsgMode)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserToken)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPwd)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerConnectFlag)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPrefix)
+        
+        $ua.AppendChild($newNodeOpcUaServer)
+    }
+
+    if (-not $tcceUaServerFound) {
+        $newNodeOpcUaServer = $xmlContent.CreateNode("element", "OpcUaServer", "")
+        $newNodeOpcUaServerName = $xmlContent.CreateNode("element", "Name", "")
+        $newNodeOpcUaServerName.InnerText = "TcCloudEngineeringUaServer"
+        $newNodeOpcUaServerUrl = $xmlContent.CreateNode("element", "Url", "")
+        $newNodeOpcUaServerUrl.InnerText = "opc.tcp://localhost:4842"
+        $newNodeOpcUaServerSecPol = $xmlContent.CreateNode("element", "SecurityPolicy", "")
+        $newNodeOpcUaServerSecPol.InnerText = "None"
+        $newNodeOpcUaServerMsgMode = $xmlContent.CreateNode("element", "MessageSecurityMode", "")
+        $newNodeOpcUaServerMsgMode.InnerText = "None"
+        $newNodeOpcUaServerUserToken = $xmlContent.CreateNode("element", "UserTokenType", "")
+        $newNodeOpcUaServerUserToken.InnerText = "Anonymous"
+        $newNodeOpcUaServerUserName = $xmlContent.CreateNode("element", "UserName", "")
+        $newNodeOpcUaServerUserName.InnerText = ""
+        $newNodeOpcUaServerPwd = $xmlContent.CreateNode("element", "Password", "")
+        $newNodeOpcUaServerPwd.InnerText = ""
+        $newNodeOpcUaServerConnectFlag = $xmlContent.CreateNode("element", "ConnectFlag", "")
+        $newNodeOpcUaServerConnectFlag.InnerText = "true"
+        $newNodeOpcUaServerPrefix = $xmlContent.CreateNode("element", "NamespacePrefixOption", "")
+        $newNodeOpcUaServerPrefix.InnerText = "Name"
+
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUrl)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerSecPol)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerMsgMode)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserToken)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPwd)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerConnectFlag)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPrefix)
+        
+        $ua.AppendChild($newNodeOpcUaServer)
+    }
+}
+else {
+        $newNodeOpcUaServer = $xmlContent.CreateNode("element", "OpcUaServer", "")
+        $newNodeOpcUaServerName = $xmlContent.CreateNode("element", "Name", "")
+        $newNodeOpcUaServerName.InnerText = "TcOpcUaServer"
+        $newNodeOpcUaServerUrl = $xmlContent.CreateNode("element", "Url", "")
+        $newNodeOpcUaServerUrl.InnerText = "opc.tcp://localhost:4840"
+        $newNodeOpcUaServerSecPol = $xmlContent.CreateNode("element", "SecurityPolicy", "")
+        $newNodeOpcUaServerSecPol.InnerText = "None"
+        $newNodeOpcUaServerMsgMode = $xmlContent.CreateNode("element", "MessageSecurityMode", "")
+        $newNodeOpcUaServerMsgMode.InnerText = "None"
+        $newNodeOpcUaServerUserToken = $xmlContent.CreateNode("element", "UserTokenType", "")
+        $newNodeOpcUaServerUserToken.InnerText = "Anonymous"
+        $newNodeOpcUaServerUserName = $xmlContent.CreateNode("element", "UserName", "")
+        $newNodeOpcUaServerUserName.InnerText = ""
+        $newNodeOpcUaServerPwd = $xmlContent.CreateNode("element", "Password", "")
+        $newNodeOpcUaServerPwd.InnerText = ""
+        $newNodeOpcUaServerConnectFlag = $xmlContent.CreateNode("element", "ConnectFlag", "")
+        $newNodeOpcUaServerConnectFlag.InnerText = "true"
+        $newNodeOpcUaServerPrefix = $xmlContent.CreateNode("element", "NamespacePrefixOption", "")
+        $newNodeOpcUaServerPrefix.InnerText = "Name"
+
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUrl)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerSecPol)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerMsgMode)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserToken)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPwd)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerConnectFlag)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPrefix)
+        
+        $ua.AppendChild($newNodeOpcUaServer)
+
+        $newNodeOpcUaServer = $xmlContent.CreateNode("element", "OpcUaServer", "")
+        $newNodeOpcUaServerName = $xmlContent.CreateNode("element", "Name", "")
+        $newNodeOpcUaServerName.InnerText = "TcCloudEngineeringUaServer"
+        $newNodeOpcUaServerUrl = $xmlContent.CreateNode("element", "Url", "")
+        $newNodeOpcUaServerUrl.InnerText = "opc.tcp://localhost:4842"
+        $newNodeOpcUaServerSecPol = $xmlContent.CreateNode("element", "SecurityPolicy", "")
+        $newNodeOpcUaServerSecPol.InnerText = "None"
+        $newNodeOpcUaServerMsgMode = $xmlContent.CreateNode("element", "MessageSecurityMode", "")
+        $newNodeOpcUaServerMsgMode.InnerText = "None"
+        $newNodeOpcUaServerUserToken = $xmlContent.CreateNode("element", "UserTokenType", "")
+        $newNodeOpcUaServerUserToken.InnerText = "Anonymous"
+        $newNodeOpcUaServerUserName = $xmlContent.CreateNode("element", "UserName", "")
+        $newNodeOpcUaServerUserName.InnerText = ""
+        $newNodeOpcUaServerPwd = $xmlContent.CreateNode("element", "Password", "")
+        $newNodeOpcUaServerPwd.InnerText = ""
+        $newNodeOpcUaServerConnectFlag = $xmlContent.CreateNode("element", "ConnectFlag", "")
+        $newNodeOpcUaServerConnectFlag.InnerText = "true"
+        $newNodeOpcUaServerPrefix = $xmlContent.CreateNode("element", "NamespacePrefixOption", "")
+        $newNodeOpcUaServerPrefix.InnerText = "Name"
+
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUrl)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerSecPol)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerMsgMode)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserToken)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerUserName)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPwd)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerConnectFlag)
+        $newNodeOpcUaServer.AppendChild($newNodeOpcUaServerPrefix)
+        
+        $ua.AppendChild($newNodeOpcUaServer)
+}
+
 # Save config file
 $xmlContent.Save($configPath)
 

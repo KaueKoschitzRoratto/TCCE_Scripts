@@ -1,4 +1,4 @@
-$totalSteps = 8
+$totalSteps = 9
 
 Write-Host "This script prepares the current virtual machine to be saved as an AMI"
 Write-Host "----------------------------------------------------------------------"
@@ -79,6 +79,18 @@ $currentStep = $currentStep + 1
 Write-Progress -Activity "AMI preparation" -Status "Removing OPC UA Server service" -PercentComplete ($currentStep / $totalSteps * 100)
 Stop-Service "TcCloudEngineeringUaServer"
 Invoke-Expression -Command "sc.exe delete TcCloudEngineeringUaServer"
+
+###################################################################################
+
+$currentStep = $currentStep + 1
+Write-Progress -Activity "AMI preparation" -Status "Removing gateway crash logs" -PercentComplete ($currentStep / $totalSteps * 100)
+
+$gatewayPath = "C:\TwinCAT\Functions\TF6100-OPC-UA\Win32\Gateway"
+$gatewayCrashLogsPath = $gatewayPath + "\crash_log*"
+
+if (Test-Path -Path $gatewayCrashLogsPath) {
+    Remove-Item -Recurse -Force $gatewayCrashLogsPath
+}
 
 ###################################################################################
 
