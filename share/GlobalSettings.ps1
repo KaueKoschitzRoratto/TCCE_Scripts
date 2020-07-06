@@ -35,4 +35,4 @@ $global:mosquittoServerCert = "mosquitto.pem"
 $global:mosquittoServerKey = "mosquitto.key"
 
 # Repository paths
-$global:repoPathInitScripts = "C:\git\TCCE_InitScripts"
+$global:repoPathInitScripts = "C:\git\TCCE_Scripts"
