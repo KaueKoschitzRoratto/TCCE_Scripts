@@ -1,5 +1,2 @@
-cd C:\git
-rmdir /s /q TCCE_InitScripts
-git clone https://github.com/Beckhoff/TCCE_InitScripts.git TCCE_InitScripts
-cd TCCE_InitScripts
-PowerShell C:\git\TCCE_InitScripts\system\Startup.ps1
+powershell.exe -File "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringMisc\CloneScriptRepo.ps1"
+powershell.exe -File "C:\git\TCCE_Scripts\system\Startup.ps1"

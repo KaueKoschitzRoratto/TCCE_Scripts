@@ -25,7 +25,6 @@ if (-Not (Test-Path $regKeyBase)) {
 else {
     $hostnameReg = Get-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname
     if ($hostnameReg.Hostname -ne $hostname) {
-        Set-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
         $init = $true # hostname differs -> cloned instance -> init
     }
 }
@@ -33,13 +32,16 @@ else {
 if($init)
 {
     # Load global settings
-    Invoke-Expression ".\share\GlobalSettings.ps1"
+    Invoke-Expression "$PSScriptRoot\..\share\GlobalSettings.ps1"
     
     # Warn user about init scripts
     [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected, which requires the one-time execution of an initialization script. Please click on OK to continue and do not close the command prompt window. A separate message box will notify you once the script has been executed.",“TwinCAT Cloud Engineering init script“,0)
 
+    # Write hostname to registry
+    Set-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
+
     # Start initialization scripts
-    Invoke-Expression ".\init\Init_Start.ps1"
+    Invoke-Expression "$PSScriptRoot\..\init\Init_Start.ps1"
 
     # Restart Windows
     [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...",“TwinCAT Cloud Engineering init script“,0)
