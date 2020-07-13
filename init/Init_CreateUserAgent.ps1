@@ -15,10 +15,10 @@ function Scramble-String([string]$inputString){
 
 $serviceName = "TcCloudEngineeringAgent"
 $username = "Tcce_User_Agent"
-$executable = "Tcce.Agent.Worker.exe"
+$executable = "AgentV2.exe"
 
-$folderPath = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringAgent\Worker"
-$description = "TwinCAT Cloud Engineering Agent background worker"
+$folderPath = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringAgent"
+$description = "TwinCAT Cloud Engineering Agent"
 $displayName = "TwinCAT Cloud Engineering Agent"
 
 $username = "Tcce_User_Agent"
