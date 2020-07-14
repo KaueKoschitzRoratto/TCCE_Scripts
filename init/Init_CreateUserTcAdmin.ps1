@@ -28,6 +28,7 @@ if (-not ($account -eq $null)) {
     Remove-LocalUser -Name $username
 }
 New-LocalUser -Name $username -FullName $username -Description "Account that allows ADS routes" -Password $passwordSec
+New-LocalGroup -Name $groupName -Description "Allows creation of ADS routes"
 Add-LocalGroupMember -Group $groupName -Member $username
 
 # Store created user credentials on user's desktop as temporary note
