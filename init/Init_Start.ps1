@@ -1,4 +1,4 @@
-$totalSteps = 13
+$totalSteps = 14
 
 # Create registry keys
 $currentStep = 1
@@ -64,3 +64,8 @@ Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserAgent.ps1"
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Initialization" -Status "CreateUserTcAdmin" -PercentComplete ($currentStep / $totalSteps * 100)
 Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserTcAdmin.ps1"
+
+# Add Windows Firewall rules
+$currentStep = $currentStep + 1
+Write-Progress -Activity "Initialization" -Status "AddFirewallRules" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\Init_AddFirewallRules.ps1"
