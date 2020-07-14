@@ -57,6 +57,8 @@ Write-Progress -Activity "AMI preparation" -Status "Removing user accounts" -Per
 Remove-LocalUser -Name "Tcce_User_OpcUa"
 Remove-LocalUser -Name "Tcce_User_Ssh"
 Remove-LocalUser -Name "Tcce_User_Agent"
+Remove-LocalUser -Name "Tcce_User_TcAdmin"
+Remove-LocalGroup -Name "TcAdmin"
 
 ###################################################################################
 
