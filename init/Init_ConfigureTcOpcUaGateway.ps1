@@ -19,7 +19,7 @@ $xmlContent.OpcServerConfig.UaServerConfig.ServerName = $serverName
 
 # Change ServerUrl and StackUrl
 $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.Url = $serverUrl
-$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.StackUrl = $serverUrl
+#$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.StackUrl = $serverUrl
 
 # Change Cert CommonName
 $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.CommonName = $publicIp.ToString()
