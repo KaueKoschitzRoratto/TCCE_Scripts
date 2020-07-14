@@ -31,7 +31,7 @@ $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
 Write-Host "Password: $password"
 
 # Create new user account if it does not exist
-$account = Get-LocalUser -Name $username
+$account = Get-LocalUser -Name $username -ErrorAction SilentlyContinue
 if (-not ($account -eq $null)) {
     Remove-LocalUser -Name $username
 }
