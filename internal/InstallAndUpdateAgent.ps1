@@ -26,7 +26,10 @@ if (Test-Path $tempFile) {
 Invoke-Expression -Command "bitsadmin /transfer TcCloudEngineeringAgentUpdate /dynamic /download /priority FOREGROUND $downloadUrl $tempFile"
 
 # Stop TwinCAT Cloud Engineering Agent service
-Stop-Service -Name TcCloudEngineeringAgent
+$serviceName = "TcCloudEngineeringAgent"
+if (-not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null) {
+    Stop-Service -Name $serviceName
+}
 
 # Check if Agent directory already exists - if not, then create it
 $agentDirectory = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringAgent"
@@ -34,8 +37,13 @@ if (-not (Test-Path $agentDirectory)) {
     New-Item -Path $agentDirectory -ItemType "directory"
 }
 
+# Remove existing Agent files
+Remove-Item -Recurse -Force $agentDirectory
+
 # Extract archive to Agent directory
 Expand-Archive -Path $tempFile $agentDirectory
 
 # Start TwinCAT Cloud Engineering Agent service
-Start-Service -Name TcCloudEngineeringAgent
+if (-not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null) {
+    Start-Service -Name $serviceName
+}
