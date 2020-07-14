@@ -27,5 +27,5 @@ $account = Get-LocalUser -Name $username
 if (-not ($account -eq $null)) {
     Remove-LocalUser -Name $username
 }
-New-LocalUser -Name $username -FullName $username -Description "Account that allows the creation of ADS routes to this system" -Password $passwordSec
+New-LocalUser -Name $username -FullName $username -Description "Account that allows ADS routes" -Password $passwordSec
 Add-LocalGroupMember -Group $groupName -Member $username
