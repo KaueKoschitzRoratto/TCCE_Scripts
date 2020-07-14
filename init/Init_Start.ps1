@@ -1,4 +1,4 @@
-$totalSteps = 12
+$totalSteps = 13
 
 # Create registry keys
 $currentStep = 1
@@ -59,3 +59,8 @@ Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserSsh.ps1"
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Initialization" -Status "CreateUserAgent" -PercentComplete ($currentStep / $totalSteps * 100)
 Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserAgent.ps1"
+
+# Create user account for ADS routes (TcAdmin)
+$currentStep = $currentStep + 1
+Write-Progress -Activity "Initialization" -Status "CreateUserTcAdmin" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserTcAdmin.ps1"
