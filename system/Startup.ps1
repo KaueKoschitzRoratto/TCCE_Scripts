@@ -35,7 +35,7 @@ if($init)
     Invoke-Expression "$PSScriptRoot\..\share\GlobalSettings.ps1"
     
     # Warn user about init scripts
-    [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected, which requires the one-time execution of an initialization script. Please click on OK to continue and do not close the command prompt window. A separate message box will notify you once the script has been executed.",“TwinCAT Cloud Engineering init script“,0)
+    [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected. This requires execution of an initialization script. Do not close the command prompt window. A separate message box will notify you once the init script has finished.",“TwinCAT Cloud Engineering init script“,0)
 
     # Write hostname to registry
     Set-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname

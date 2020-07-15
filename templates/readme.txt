@@ -1,6 +1,7 @@
-TwinCAT Cloud Engineering
-=========================
-The following user credentials have been created to access the TwinCAT Cloud Engineering OPC UA Server.
+Created user accounts for this TwinCAT Cloud Engineering instance
+=================================================================
+
+The following user credentials have been created to access the TwinCAT OPC UA Gateway.
     ServerUrl: opc.tcp://%publicIp%:48050
     Username: %usernameOpcUa%
     Password: %passwordOpcUa%

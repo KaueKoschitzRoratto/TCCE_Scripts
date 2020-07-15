@@ -71,9 +71,14 @@ Remove-Item -Path "$sshDirectory\ssh_host_*" -Force
 ###################################################################################
 
 $currentStep = $currentStep + 1
-Write-Progress -Activity "AMI preparation" -Status "Removing Agent service" -PercentComplete ($currentStep / $totalSteps * 100)
+Write-Progress -Activity "AMI preparation" -Status "Removing Agent installation and service" -PercentComplete ($currentStep / $totalSteps * 100)
 Stop-Service "TcCloudEngineeringAgent"
 Invoke-Expression -Command "sc.exe delete TcCloudEngineeringAgent"
+
+$agentDirectory = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringAgent"
+if (Test-Path -Path $agentDirectory) {
+    Remove-Item -Recurse -Force $agentDirectory
+}
 
 ###################################################################################
 

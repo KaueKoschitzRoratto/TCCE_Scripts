@@ -38,11 +38,15 @@ if (-not ($account -eq $null)) {
 New-LocalUser -Name $username -FullName $username -Description "Account for Tcce Agent Windows service" -Password $passwordSec
 Add-LocalGroupMember -Group $groupName -Member $username
 
-# User account has been created, now create Windows service
+# User account has been created, now install Agent and create Windows service
 $username = "$env:computername\$username"
 $psCredentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $passwordSec
 
 $exeName = "$executable"
 $exePath = "$folderPath\$exeName"
 
+# Install Agent
+Invoke-Expression "$PSScriptRoot\..\user\InstallUpdateAgent.ps1"
+
+# Create Windows Service
 New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic

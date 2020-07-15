@@ -1,71 +1,61 @@
-$totalSteps = 14
+$totalSteps = 12
 
 # Create registry keys
 $currentStep = 1
-Write-Progress -Activity "Initialization" -Status "CreateRegKeys" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateRegKeys.ps1"
+Write-Progress -Activity "Initialization" -Status "Create registry keys" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\CreateRegKeys.ps1"
 
 # Create Certificate Authority
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateCertificateAuthority" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateCertificateAuthority.ps1"
-
-# Create server certificate for local Mosquitto message broker
-$currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateMosquittoCertificate" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateMosquittoCertificate.ps1 $hostname"
-
-# Create client certificate for ADS-over-MQTT
-$currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateAdsOverMqttCertificate" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateAdsOverMqttCertificate.ps1 $hostname"
+Write-Progress -Activity "Initialization" -Status "Initialize Certificate Authority" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\CreateCertificateAuthority.ps1"
 
 # Configure TwinCAT OPC UA Server
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "ConfigureTcOpcUaServer" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_ConfigureTcOpcUaServer.ps1 $hostname"
+Write-Progress -Activity "Initialization" -Status "Initialize TwinCAT OPC UA Server" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\InitializeTcOpcUaServer.ps1 $hostname"
 
 # Configure TwinCAT OPC UA Gateway
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "ConfigureTcOpcUaGateway" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_ConfigureTcOpcUaGateway.ps1 $hostname"
+Write-Progress -Activity "Initialization" -Status "Initialize TwinCAT OPC UA Gateway" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\InitializeTcOpcUaGateway.ps1 $hostname"
 
 # Configure TwinCAT System Service with ADS-over-MQTT route
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "ConfigureAdsOverMqtt" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_ConfigureAdsOverMqtt.ps1"
+Write-Progress -Activity "Initialization" -Status "Initialize TwinCAT ADS-over-MQTT" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\InitializeAdsOverMqtt.ps1 $hostname"
+
+# Initialize TwinCAT Cloud Engineering Agent
+$currentStep = $currentStep + 1
+Write-Progress -Activity "Initialization" -Status "Initialize TwinCAT Cloud Engineering Agent" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\InitializeAgent.ps1"
 
 # Configure Mosquitto message broker
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "ConfigureMosquitto" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_ConfigureMosquitto.ps1"
+Write-Progress -Activity "Initialization" -Status "Initialize Mosquitto message broker" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\InitializeMosquitto.ps1 $hostname"
 
 # Reset AMS Net ID
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "ResetAmsNetId" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_ResetAmsNetId.ps1"
+Write-Progress -Activity "Initialization" -Status "Reset AMS Net ID" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\ResetAmsNetId.ps1"
 
 # Create user account for TcOpcUaGateway
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateUserOpcUa" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserOpcUa.ps1"
+Write-Progress -Activity "Initialization" -Status "Create OPC UA user" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\CreateUserOpcUa.ps1"
 
 # Create user account for SSH access
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateUserSsh" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserSsh.ps1"
-
-# Create user account for Tcce Agent Windows service
-$currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateUserAgent" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserAgent.ps1"
+Write-Progress -Activity "Initialization" -Status "Create SSH user" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\CreateUserSsh.ps1"
 
 # Create user account for ADS routes (TcAdmin)
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "CreateUserTcAdmin" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_CreateUserTcAdmin.ps1"
+Write-Progress -Activity "Initialization" -Status "Create TcAdmin user" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\CreateUserTcAdmin.ps1"
 
 # Add Windows Firewall rules
 $currentStep = $currentStep + 1
-Write-Progress -Activity "Initialization" -Status "AddFirewallRules" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression "$PSScriptRoot\..\init\Init_AddFirewallRules.ps1"
+Write-Progress -Activity "Initialization" -Status "Add Firewall rules" -PercentComplete ($currentStep / $totalSteps * 100)
+Invoke-Expression "$PSScriptRoot\..\init\AddFirewallRules.ps1"
