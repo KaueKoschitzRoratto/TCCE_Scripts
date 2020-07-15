@@ -43,6 +43,20 @@ Remove-Item -Recurse -Force $agentDirectory
 # Extract archive to Agent directory
 Expand-Archive -Path $tempFile $agentDirectory
 
+# Write installed Agent version to Windows Registry
+$regKey = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT Cloud Engineering"
+$regKeyAgentProp = "AgentVersion"
+if (Test-Path $regKey) {
+    $prop = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp
+    if ($prop -eq $null) {
+        New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
+    }
+    else {
+        Remove-ItemProperty -Path $regKey -Name $regKeyAgentProp
+        New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
+    }
+}
+
 # Start TwinCAT Cloud Engineering Agent service
 if (-not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null) {
     Start-Service -Name $serviceName

@@ -1,5 +1,3 @@
-Write-Host "Starting creation of user account for Tcce Agent Windows service..."
-
 function Get-RandomCharacters($length, $characters) { 
     $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length } 
     $private:ofs="" 
