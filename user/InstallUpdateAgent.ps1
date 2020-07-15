@@ -14,7 +14,7 @@ $regKey = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT Cloud Engineering"
 $regKeyAgentProp = "AgentVersion"
 $install = $false
 if (Test-Path $regKey) {
-    $installedVersion = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp
+    $installedVersion = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp -ErrorAction SilentlyContinue
     if (-not ($installedVersion -eq $null)) {
         # Existing Agent installation found -> check if latest version on remote repo is newer
         $selectedVersionObj = [version]$selectedVersion
