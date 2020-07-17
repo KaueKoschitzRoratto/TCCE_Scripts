@@ -1,5 +1,11 @@
 $hostname = $args[0]
 
+$tcSysSrvRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
+$tcSysSrvRoutesName = "AdsOverMqtt.xml"
+$tcSysSrvAdsMqttClientCert = "AdsOverMqtt.pem"
+$tcSysSrvAdsMqttClientCsr = "AdsOverMqtt.csr"
+$tcSysSrvAdsMqttClientKey = "AdsOverMqtt.key"
+
 # Remove any existing files
 if (Test-Path -Path "$caPath\$tcSysSrvAdsMqttClientCert") {
     Remove-Item -Recurse -Force "$caPath\$tcSysSrvAdsMqttClientCert"
@@ -9,13 +15,13 @@ if (Test-Path -Path "$caPath\$tcSysSrvAdsMqttClientKey") {
 }
 
 # Generate new private key
-Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "genrsa -out $tcSysSrvAdsMqttClientKey 2048"
+Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "genrsa -out $tcSysSrvAdsMqttClientKey 4096"
 
 # Generate self-signed certificate
-Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "req -new -sha256 -key $tcSysSrvAdsMqttClientKey -out $tcSysSrvAdsMqttClientCert -subj /C=DE/ST=NRW/L=Verl/O=BeckhoffAutomation/OU=DeviceCert/CN=$publicIp"
+Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "req -config $caConfig -new -sha256 -key $tcSysSrvAdsMqttClientKey -out $tcSysSrvAdsMqttClientCsr -subj /C=DE/ST=NRW/L=Verl/O=BeckhoffAutomation/OU=DeviceCert/CN=$publicIp"
 
 # Sign self-signed certificate by certificate authority
-Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "x509 -req -in $tcSysSrvAdsMqttClientCert -CA $caCert -CAkey $caKey -CAcreateserial -out $tcSysSrvAdsMqttClientCert -days 7300 -sha256"
+Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "ca -config $caConfig -batch -days 7300 -notext -md sha256 -in $tcSysSrvAdsMqttClientCsr -extensions usr_cert -out $tcSysSrvAdsMqttClientCert"
 
 # Remove any existing ADS-over-MQTT routes file but create a backup first
 if (-not (Test-Path -Path $tcSysSrvRoutesPath)) {

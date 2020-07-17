@@ -70,7 +70,7 @@ if ($install) {
 
     # Write installed Agent version to Windows Registry
     if (Test-Path $regKey) {
-        $prop = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp
+        $prop = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp -ErrorAction SilentlyContinue
         if ($prop -eq $null) {
             New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
         }

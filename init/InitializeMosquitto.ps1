@@ -1,5 +1,11 @@
 $hostname = $args[0]
 
+$mosquittoPath = "C:\Program Files\mosquitto"
+$mosquittoConf = "mosquitto.conf"
+$mosquittoServerCert = "mosquitto.pem"
+$mosquittoServerCsr = "mosquitto.csr"
+$mosquittoServerKey = "mosquitto.key"
+
 # Remove any existing files
 if (Test-Path -Path "$caPath\$mosquittoServerCert") {
     Remove-Item -Recurse -Force "$caPath\$mosquittoServerCert"
@@ -9,13 +15,13 @@ if (Test-Path -Path "$caPath\$mosquittoServerKey") {
 }
 
 # Generate new private key
-Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "genrsa -out $mosquittoServerKey 2048"
+Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "genrsa -out $mosquittoServerKey 4096"
 
 # Generate self-signed certificate
-Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "req -new -sha256 -key $mosquittoServerKey -out $mosquittoServerCert -subj /C=DE/ST=NRW/L=Verl/O=BeckhoffAutomation/OU=ServerCert/CN=$publicIp"
+Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "req -config $caConfig -new -sha256 -key $mosquittoServerKey -out $mosquittoServerCsr -subj /C=DE/ST=NRW/L=Verl/O=BeckhoffAutomation/OU=ServerCert/CN=$publicIp"
 
 # Sign self-signed certificate by certificate authority
-Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "x509 -req -in $mosquittoServerCert -CA $caCert -CAkey $caKey -CAcreateserial -out $mosquittoServerCert -days 7300 -sha256"
+Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "ca -config $caConfig -batch -days 7300 -notext -md sha256 -in $mosquittoServerCsr -extensions server_cert -out $mosquittoServerCert"
 
 $mosquittoConfContent = @"
 listener 8883`n
