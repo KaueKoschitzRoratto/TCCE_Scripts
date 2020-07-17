@@ -55,7 +55,8 @@ $currentStep = $currentStep + 1
 Write-Progress -Activity "AMI preparation" -Status "Removing user accounts" -PercentComplete ($currentStep / $totalSteps * 100)
 
 Remove-LocalUser -Name "Tcce_User_OpcUa"
-Remove-LocalUser -Name "Tcce_User_Ssh"
+Remove-LocalUser -Name "Tcce_User_SSH"
+Remove-LocalUser -Name "Tcce_User_SSHAdmin"
 Remove-LocalUser -Name "Tcce_User_Agent"
 Remove-LocalUser -Name "Tcce_User_TcAdmin"
 Remove-LocalGroup -Name "TcAdmin"
