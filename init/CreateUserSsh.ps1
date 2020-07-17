@@ -17,10 +17,10 @@ $username = "Tcce_User_SSH"
 $usernameAdmin = "Tcce_User_SSHAdmin"
 $groupName = "Tcce_Group_SSH"
 $groupNameAdmin = "Tcce_Group_SSHAdmins"
-$password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
+$password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&()=?@#+'
 $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
-$passwordAdmin = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
+$passwordAdmin = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&()=?@#+'
 $passwordAdmin = Scramble-String($passwordAdmin)
 $passwordSecAdmin = ConvertTo-SecureString -String $password -AsPlainText -Force
 
@@ -39,7 +39,6 @@ if (-not ($account -eq $null)) {
 }
 New-LocalUser -Name $usernameAdmin -FullName $usernameAdmin -Description "Account for SSH authentication" -Password $passwordSecAdmin
 Add-LocalGroupMember -Group $groupNameAdmin -Member $usernameAdmin
-Add-LocalGroupMember -Group $groupName -Member $usernameAdmin
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
