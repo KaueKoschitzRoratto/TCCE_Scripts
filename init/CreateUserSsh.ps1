@@ -21,7 +21,7 @@ $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxy
 $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
 $passwordAdmin = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
-$passwordAdmin = Scramble-String($password)
+$passwordAdmin = Scramble-String($passwordAdmin)
 $passwordSecAdmin = ConvertTo-SecureString -String $password -AsPlainText -Force
 
 # Create new user account if it does not exist
