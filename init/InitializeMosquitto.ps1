@@ -29,6 +29,7 @@ allow_anonymous true`n
 require_certificate true`n
 `n
 cafile $caPath\$caCert`n
+crlfile $caPath\$caCrl`n
 certfile $caPath\$mosquittoServerCert`n
 keyfile $caPath\$mosquittoServerKey`n
 "@
