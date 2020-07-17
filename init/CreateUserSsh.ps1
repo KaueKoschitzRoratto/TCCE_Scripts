@@ -39,6 +39,7 @@ if (-not ($account -eq $null)) {
 }
 New-LocalUser -Name $usernameAdmin -FullName $usernameAdmin -Description "Account for SSH authentication" -Password $passwordSecAdmin
 Add-LocalGroupMember -Group $groupNameAdmin -Member $usernameAdmin
+Add-LocalGroupMember -Group $groupName -Member $usernameAdmin
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
