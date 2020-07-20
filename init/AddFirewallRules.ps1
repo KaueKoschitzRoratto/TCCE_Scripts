@@ -33,3 +33,9 @@ $existingRule = Get-NetFirewallRule -DisplayName "Tcce_AdsSecure" -ErrorAction S
 if ($existingRule -eq $null) {
     $newRule = New-NetFirewallRule -DisplayName "Tcce_AdsSecure" -Description "Allows incoming traffic to port 8016/tcp (TwinCAT SecureADS)" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8016 -Enabled "False"
 }
+
+# Add firewall rule for SSH if it does not exist
+$existingRule = Get-NetFirewallRule -DisplayName "Tcce_Ssh" -ErrorAction SilentlyContinue
+if ($existingRule -eq $null) {
+    $newRule = New-NetFirewallRule -DisplayName "Tcce_Ssh" -Description "Allows incoming traffic to port 22/tcp (SSH)" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8016 -Enabled "True"
+}

@@ -123,6 +123,9 @@ $newRule = Remove-NetFirewallRule -DisplayName "Tcce_AdsDiscovery"
 # Remove firewall rule for ADSSecure
 $newRule = Remove-NetFirewallRule -DisplayName "Tcce_AdsSecure"
 
+# Remove firewall rule for SSH
+$newRule = Remove-NetFirewallRule -DisplayName "Tcce_Ssh"
+
 ###################################################################################
 
 Read-Host "Finished AMI preparations!!"
