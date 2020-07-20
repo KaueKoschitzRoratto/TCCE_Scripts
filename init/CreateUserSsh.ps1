@@ -17,12 +17,14 @@ $username = "Tcce_User_SSH"
 $usernameAdmin = "Tcce_User_SSHAdmin"
 $groupName = "Tcce_Group_SSH"
 $groupNameAdmin = "Tcce_Group_SSHAdmins"
+
 $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&()=?@#+'
 $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
+
 $passwordAdmin = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&()=?@#+'
 $passwordAdmin = Scramble-String($passwordAdmin)
-$passwordSecAdmin = ConvertTo-SecureString -String $password -AsPlainText -Force
+$passwordSecAdmin = ConvertTo-SecureString -String $passwordAdmin -AsPlainText -Force
 
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $username -ErrorAction SilentlyContinue
