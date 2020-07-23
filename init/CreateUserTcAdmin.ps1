@@ -39,7 +39,7 @@ if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
   $cpy = Copy-Item -Path "$repoPathInitScripts\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
 }
 $readmeContent = Get-Content -Path "$templateReadmePath\$templateReadmeFile" -Raw
-$readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
+$readmeContent = $readmeContent.Replace("%publicIp%", $PublicIp)
 $readmeContent = $readmeContent.Replace("%usernameTcAdmin%", $username)
 $readmeContent = $readmeContent.Replace("%passwordTcAdmin%", $password)
 
