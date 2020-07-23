@@ -40,49 +40,48 @@ if ($install) {
     $tempFile = "$tempDirectory\$releaseBinaryName"
 
     if (-not(Test-Path $tempDirectory)) {
-        New-Item -Path $tempDirectory -ItemType "directory"
+        $dir = New-Item -Path $tempDirectory -ItemType "directory"
     }
 
     if (Test-Path $tempFile) {
-        Remove-Item -Path $tempFile
+        $rmv = Remove-Item -Path $tempFile
     }
 
     # Download release binary via BITS
-    Invoke-Expression -Command "bitsadmin /transfer TcCloudEngineeringAgentUpdate /dynamic /download /priority FOREGROUND $downloadUrl $tempFile"
+    Invoke-Expression -Command "bitsadmin /NOWRAP /transfer TcCloudEngineeringAgentUpdate /dynamic /download /priority FOREGROUND $downloadUrl $tempFile"
 
     # Stop TwinCAT Cloud Engineering Agent service
     $serviceName = "TcCloudEngineeringAgent"
     if (-not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null) {
-        Stop-Service -Name $serviceName
+        $svc = Stop-Service -Name $serviceName
     }
 
     # Check if Agent directory already exists - if not, then create it
     $agentDirectory = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringAgent"
     if (-not (Test-Path $agentDirectory)) {
-        New-Item -Path $agentDirectory -ItemType "directory"
+        $dir = New-Item -Path $agentDirectory -ItemType "directory"
     }
 
     # Remove existing Agent files
-    Remove-Item -Recurse -Force $agentDirectory
+    $rmv = Remove-Item -Recurse -Force $agentDirectory
 
     # Extract archive to Agent directory
-    Expand-Archive -Path $tempFile $agentDirectory
+    $zip = Expand-Archive -Path $tempFile $agentDirectory
 
     # Write installed Agent version to Windows Registry
     if (Test-Path $regKey) {
         $prop = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp -ErrorAction SilentlyContinue
         if ($prop -eq $null) {
-            New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
+            $key = New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
         }
         else {
-            Remove-ItemProperty -Path $regKey -Name $regKeyAgentProp
-            New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
+            $rmv = Remove-ItemProperty -Path $regKey -Name $regKeyAgentProp
+            $key = New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
         }
     }
 
     # Start TwinCAT Cloud Engineering Agent service
     if (-not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null) {
-        Start-Service -Name $serviceName
+        $svc = Start-Service -Name $serviceName
     }
-
 }

@@ -1,4 +1,7 @@
-Write-Host "Starting creation of user account for TcOpcUaGateway auth..."
+$templateReadmePath = "C:\Users\Administrator\Desktop"
+$templateReadmeFile = "readme.txt"
+
+$repoPathInitScripts = "C:\git\TCCE_Scripts"
 
 function Get-RandomCharacters($length, $characters) { 
     $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length } 
@@ -30,10 +33,10 @@ $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $username -ErrorAction SilentlyContinue
 if (-not ($account -eq $null)) {
-    Remove-LocalUser -Name $username
+    $rmv = Remove-LocalUser -Name $username
 }
-New-LocalUser -Name $username -FullName $username -Description "Account for TCCE OPC UA Server" -Password $passwordSec
-Add-LocalGroupMember -Group $groupName -Member $username
+$usr = New-LocalUser -Name $username -FullName $username -Description "Account for TCCE OPC UA Server" -Password $passwordSec
+$grp = Add-LocalGroupMember -Group $groupName -Member $username
 
 # User account has been created, now create Windows service
 $usernameInclComputername = "$env:computername\$username"
@@ -42,15 +45,15 @@ $psCredentials = New-Object -TypeName System.Management.Automation.PSCredential 
 $exeName = "$executable"
 $exePath = "$folderPath\$exeName"
 
-New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
+$svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
-  Copy-Item -Path "$repoPathInitScripts\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
+  $cpy = Copy-Item -Path "$repoPathInitScripts\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
 }
 $readmeContent = Get-Content -Path "$templateReadmePath\$templateReadmeFile" -Raw
 $readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
 $readmeContent = $readmeContent.Replace("%usernameOpcUa%", $username)
 $readmeContent = $readmeContent.Replace("%passwordOpcUa%", $password)
 
-Set-Content -Path $templateReadmePath\$templateReadmeFile -Value $readmeContent
+$xml = Set-Content -Path $templateReadmePath\$templateReadmeFile -Value $readmeContent

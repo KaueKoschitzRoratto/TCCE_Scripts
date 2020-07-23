@@ -1,9 +1,10 @@
-Write-Host "Starting configuration of TwinCAT OPC UA Server..."
+param ($Hostname)
 
-$hostname = $args[0]
+$serverName = "TcOpcUaServer@" + $Hostname
+$serverUrl = "opc.tcp://" + $Hostname + ":4840"
 
-$serverName = "TcOpcUaServer@" + $hostname
-$serverUrl = "opc.tcp://" + $hostname + ":4840"
+$tcInstallDir = "C:\TwinCAT"
+$tcFunctionsInstallDir = $tcInstallDir + "\Functions"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Server"
 $configPath = $baseInstallPath + "\TcUaServerConfig.xml"
@@ -13,7 +14,7 @@ $pkiOwnCert = $pkiPathServer + "\CA\own\certs\Beckhoff_OpcUaServer.der"
 $pkiOwnPrivate = $pkiPathServer + "\CA\own\private\Beckhoff_OpcUaServer.pem"
 
 # Stop TcOpcUaServer.exe
-Stop-Process -Name TcOpcUaServer -Force
+$svc = Stop-Process -Name TcOpcUaServer -Force
 
 # Load XML
 [xml] $xmlContent = Get-Content -Path $configPath
@@ -25,23 +26,23 @@ $xmlContent.OpcServerConfig.UaServerConfig.ServerName = $serverName
 $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.Url = $serverUrl
 
 # Change Cert CommonName
-$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.CertificateStore.CertificateSettings.CommonName = $hostname
+$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.CertificateStore.CertificateSettings.CommonName = $Hostname
 
 # Change Cert DNSName
-$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.CertificateStore.CertificateSettings.DNSName = $hostname
+$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.CertificateStore.CertificateSettings.DNSName = $Hostname
 
 # Save config file
 $xmlContent.Save($configPath)
 
 # Remove PKI.bkp directory
 if (Test-Path -Path $pkiPathBkpServer) {
-    Remove-Item -Recurse -Force $pkiPathBkpServer
+    $rmv = Remove-Item -Recurse -Force $pkiPathBkpServer
 }
 
 # Remove own server certificate because it needs to be re-created
 if (Test-Path -Path $pkiOwnCert) {
-    Remove-Item -Force $pkiOwnCert
+    $rmv = Remove-Item -Force $pkiOwnCert
 }
 if (Test-Path -Path $pkiOwnPrivate) {
-    Remove-Item -Force $pkiOwnPrivate
+    $rmv = Remove-Item -Force $pkiOwnPrivate
 }

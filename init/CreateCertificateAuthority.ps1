@@ -1,16 +1,33 @@
-Write-Host "Starting creation of a local certificate authority..."
+$regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
+$regKeyCloudEng = "TwinCAT Cloud Engineering"
+$regKeyBase = $regKeyBeckhoff + $regKeyCloudEng
+$regKeyPropertyCaPath = "CaPath"
+$regKeyPropertyCaCertsPath = "CaCertsPath"
+
+$repoPathInitScripts = "C:\git\TCCE_Scripts"
+
+$caPath = "C:\CA"
+$caCertsPath = $caPath + "\certs"
+$caConfig = "openssl_ca.cnf"
+$caCert = "rootCA.pem"
+$caKey = "rootCA.key"
+$caCrl = "rootCA.crl"
 
 # Create directory for CA
 if (-not (Test-Path -Path $caPath)) {
-    New-Item -Path $caPath -ItemType "directory"
-    New-Item -Path $caCertsPath -ItemType "directory"
+    $dir = New-Item -Path $caPath -ItemType "directory"
+    $dir = New-Item -Path $caCertsPath -ItemType "directory"
 }
 
 # Copy template files
-Copy-Item -Path "$repoPathInitScripts\templates\ca\openssl_ca.cnf" -Destination $caPath
-Copy-Item -Path "$repoPathInitScripts\templates\ca\index.txt" -Destination $caPath
-Copy-Item -Path "$repoPathInitScripts\templates\ca\crlnumber" -Destination $caPath
-Copy-Item -Path "$repoPathInitScripts\templates\ca\serial" -Destination $caPath
+$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\openssl_ca.cnf" -Destination $caPath
+$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\index.txt" -Destination $caPath
+$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\crlnumber" -Destination $caPath
+$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\serial" -Destination $caPath
+
+# Create registry property to store CA paths
+$key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyCaPath -Value $caPath
+$key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyCaCertsPath -Value $caCertsPath
 
 # Give user group Tcce_Group_OpcUa read/write permissions on the CA directory
 $acl = Get-Acl $caPath

@@ -1,9 +1,10 @@
-Write-Host "Starting configuration of TwinCAT OPC UA Gateway..."
+param ($Hostname, $PublicIp)
 
-$hostname = $args[0]
+$serverName = "TcOpcUaGateway@" + $PublicIp.ToString()
+$serverUrl = "opc.tcp://" + $Hostname + ":48050"
 
-$serverName = "TcOpcUaGateway@" + $publicIp.ToString()
-$serverUrl = "opc.tcp://" + $hostname + ":48050"
+$tcInstallDir = "C:\TwinCAT"
+$tcFunctionsInstallDir = $tcInstallDir + "\Functions"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Gateway"
 $configPath = $baseInstallPath + "\bin\uagateway.config.xml"
@@ -22,16 +23,16 @@ $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.Url = $serverUrl
 #$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.StackUrl = $serverUrl
 
 # Change Cert CommonName
-$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.CommonName = $publicIp.ToString()
+$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.CommonName = $PublicIp.ToString()
 
 # Change Cert DomainComponent
-$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.DomainComponent = $hostname
+$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.DomainComponent = $Hostname
 
 # Change Cert DNSName
-$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.DNSName = $hostname
+$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.DNSName = $Hostname
 
 # Change Cert IPAddress
-$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.IPAddress = $publicIp.ToString()
+$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.IPAddress = $PublicIp.ToString()
 
 # Disable anonymous auth
 $xmlContent.OpcServerConfig.UaServerConfig.UserIdentityTokens.EnableAnonymous = "false"
@@ -199,11 +200,11 @@ $xmlContent.Save($configPath)
 
 # Remove own server certificate because it needs to be re-created
 if (Test-Path -Path $pkiOwnCert) {
-    Remove-Item -Force $pkiOwnCert
+    $rmv = Remove-Item -Force $pkiOwnCert
 }
 if (Test-Path -Path $pkiOwnPrivate) {
-    Remove-Item -Force $pkiOwnPrivate
+    $rmv = Remove-Item -Force $pkiOwnPrivate
 }
 
 # Restart UA Gateway service
-Restart-Service -Name "UaGateway"
+$svc = Restart-Service -Name "UaGateway" -Force

@@ -26,15 +26,13 @@ $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxy
 $password = Scramble-String($password)
 $passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
 
-Write-Host "Password: $password"
-
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $username -ErrorAction SilentlyContinue
 if (-not ($account -eq $null)) {
-    Remove-LocalUser -Name $username
+    $rmv = Remove-LocalUser -Name $username
 }
-New-LocalUser -Name $username -FullName $username -Description "Account for Tcce Agent Windows service" -Password $passwordSec
-Add-LocalGroupMember -Group $groupName -Member $username
+$usr = New-LocalUser -Name $username -FullName $username -Description "Account for Tcce Agent Windows service" -Password $passwordSec
+$grp = Add-LocalGroupMember -Group $groupName -Member $username
 
 # User account has been created, now install Agent and create Windows service
 $username = "$env:computername\$username"
@@ -47,4 +45,4 @@ $exePath = "$folderPath\$exeName"
 Invoke-Expression "$PSScriptRoot\..\user\InstallUpdateAgent.ps1"
 
 # Create Windows Service
-New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
+$svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic

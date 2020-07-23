@@ -1,8 +1,7 @@
 $totalSteps = 11
 
-Write-Host "This script prepares the current virtual machine to be saved as an AMI"
-Write-Host "----------------------------------------------------------------------"
-
+###################################################################################
+# This script prepares the current virtual machine to be saved as an AMI
 ###################################################################################
 
 $currentStep = 1
@@ -178,6 +177,8 @@ Disable-NetFirewallRule -DisplayName "Network Discovery (WSD Events-In)"
 Disable-NetFirewallRule -DisplayName "Network Discovery (WSD EventsSecure-In)"
 
 Disable-NetFirewallRule -DisplayName "Network Discovery (WSD-In)"
+
+Disable-NetFirewallRule -DisplayName "OpenSSH Server (sshd)"
 
 ###################################################################################
 

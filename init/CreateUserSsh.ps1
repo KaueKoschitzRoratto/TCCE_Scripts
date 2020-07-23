@@ -1,4 +1,7 @@
-Write-Host "Starting creation of user account for SSH auth..."
+$templateReadmePath = "C:\Users\Administrator\Desktop"
+$templateReadmeFile = "readme.txt"
+
+$repoPathInitScripts = "C:\git\TCCE_Scripts"
 
 function Get-RandomCharacters($length, $characters) { 
     $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length } 
@@ -29,22 +32,22 @@ $passwordSecAdmin = ConvertTo-SecureString -String $passwordAdmin -AsPlainText -
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $username -ErrorAction SilentlyContinue
 if (-not ($account -eq $null)) {
-    Remove-LocalUser -Name $username
+    $rmv = Remove-LocalUser -Name $username
 }
-New-LocalUser -Name $username -FullName $username -Description "Account for SSH authentication" -Password $passwordSec
-Add-LocalGroupMember -Group $groupName -Member $username
+$usr = New-LocalUser -Name $username -FullName $username -Description "Account for SSH authentication" -Password $passwordSec
+$grp = Add-LocalGroupMember -Group $groupName -Member $username
 
 # Create new user account if it does not exist
 $account = Get-LocalUser -Name $usernameAdmin -ErrorAction SilentlyContinue
 if (-not ($account -eq $null)) {
-    Remove-LocalUser -Name $usernameAdmin
+    $rmv = Remove-LocalUser -Name $usernameAdmin
 }
-New-LocalUser -Name $usernameAdmin -FullName $usernameAdmin -Description "Account for SSH authentication" -Password $passwordSecAdmin
-Add-LocalGroupMember -Group $groupNameAdmin -Member $usernameAdmin
+$usr = New-LocalUser -Name $usernameAdmin -FullName $usernameAdmin -Description "Account for SSH authentication" -Password $passwordSecAdmin
+$grp = Add-LocalGroupMember -Group $groupNameAdmin -Member $usernameAdmin
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
-  Copy-Item -Path "$repoPathInitScripts\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
+  $cpy = Copy-Item -Path "$repoPathInitScripts\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
 }
 $readmeContent = Get-Content -Path "$templateReadmePath\$templateReadmeFile" -Raw
 $readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
@@ -54,4 +57,4 @@ $readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
 $readmeContent = $readmeContent.Replace("%usernameSshAdmin%", $usernameAdmin)
 $readmeContent = $readmeContent.Replace("%passwordSshAdmin%", $passwordAdmin)
 
-Set-Content -Path $templateReadmePath\$templateReadmeFile -Value $readmeContent
+$xml = Set-Content -Path $templateReadmePath\$templateReadmeFile -Value $readmeContent
