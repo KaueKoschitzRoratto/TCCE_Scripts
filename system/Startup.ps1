@@ -47,3 +47,6 @@ if($init)
     [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...",“TwinCAT Cloud Engineering init script“,0)
     Restart-Computer
 }
+
+# Start TCCE Agent update
+Invoke-Expression "$PSScriptRoot\..\user\InstallUpdateAgent.ps1"
