@@ -1,3 +1,5 @@
+param ($PublicIp)
+
 $templateReadmePath = "C:\Users\Administrator\Desktop"
 $templateReadmeFile = "readme.txt"
 
@@ -50,10 +52,9 @@ if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
   $cpy = Copy-Item -Path "$repoPathInitScripts\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
 }
 $readmeContent = Get-Content -Path "$templateReadmePath\$templateReadmeFile" -Raw
-$readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
+$readmeContent = $readmeContent.Replace("%publicIp%", $PublicIp)
 $readmeContent = $readmeContent.Replace("%usernameSsh%", $username)
 $readmeContent = $readmeContent.Replace("%passwordSsh%", $password)
-$readmeContent = $readmeContent.Replace("%publicIp%", $publicIp)
 $readmeContent = $readmeContent.Replace("%usernameSshAdmin%", $usernameAdmin)
 $readmeContent = $readmeContent.Replace("%passwordSshAdmin%", $passwordAdmin)
 

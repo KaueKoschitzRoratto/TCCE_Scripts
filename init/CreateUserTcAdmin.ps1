@@ -1,3 +1,5 @@
+param ($PublicIp)
+
 $templateReadmePath = "C:\Users\Administrator\Desktop"
 $templateReadmeFile = "readme.txt"
 

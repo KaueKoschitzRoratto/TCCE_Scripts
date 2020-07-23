@@ -5,6 +5,9 @@ $regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
 $regKeyCloudEng = "TwinCAT Cloud Engineering"
 $regKeyBase = $regKeyBeckhoff + $regKeyCloudEng
 $regKeyPropertyHostname = "Hostname"
+$regKeyPropertyInitScriptsRepo = "InitScriptsRepo"
+
+$repoPathInitScripts = "C:\git\TCCE_Scripts"
 
 # IMDSv1 - Retrieve public hostname of instance and store in registry to detect if InitScript needs to run again (Clone)
 $hostname = Invoke-RestMethod -Method GET -Uri http://169.254.169.254/latest/meta-data/public-hostname
@@ -38,10 +41,6 @@ if($init)
     if(Test-Path -Path "$regKeyBase") {
         # Write hostname to registry
         $key = Set-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
-        # Create registry property to store path to TCCE_InitScripts repository
-        $key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyInitScriptsRepo -Value $repoPathInitScripts
-        # Create registry property to store public IP
-        $key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyPublicIp -Value $publicIp
     }
 
     # Initialize Certificate Authority
@@ -87,12 +86,12 @@ if($init)
     # Create user account for SSH access
     $currentStep = $currentStep + 1
     Write-Progress -Activity "Initialization" -Status "Create SSH user" -PercentComplete ($currentStep / $progressStepsTotal * 100)
-    Invoke-Expression "$PSScriptRoot\..\init\CreateUserSsh.ps1"
+    Invoke-Expression "$PSScriptRoot\..\init\CreateUserSsh.ps1 -PublicIp $publicIp"
 
     # Create user account for ADS routes (TcAdmin)
     $currentStep = $currentStep + 1
     Write-Progress -Activity "Initialization" -Status "Create TcAdmin user" -PercentComplete ($currentStep / $progressStepsTotal * 100)
-    Invoke-Expression "$PSScriptRoot\..\init\CreateUserTcAdmin.ps1"
+    Invoke-Expression "$PSScriptRoot\..\init\CreateUserTcAdmin.ps1 -PublicIp $publicIp"
 
     # Add Windows Firewall rules
     $currentStep = $currentStep + 1
