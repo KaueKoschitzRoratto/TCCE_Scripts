@@ -47,8 +47,10 @@ if ($install) {
         $rmv = Remove-Item -Path $tempFile
     }
 
-    # Download release binary via BITS
-    Invoke-Expression -Command "bitsadmin /NOWRAP /transfer TcCloudEngineeringAgentUpdate /dynamic /download /priority FOREGROUND $downloadUrl $tempFile"
+    # Download release binary via BITS or Invoke-WebRequest
+    #Invoke-Expression -Command "bitsadmin /NOWRAP /transfer TcCloudEngineeringAgentUpdate /dynamic /download /priority FOREGROUND $downloadUrl $tempFile"
+    $ProgressPreference = 'SilentlyContinue'
+    Invoke-WebRequest -Uri $downloadUrl -OutFile $tempFile
 
     # Stop TwinCAT Cloud Engineering Agent service
     $serviceName = "TcCloudEngineeringAgent"
