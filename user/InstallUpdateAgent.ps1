@@ -52,7 +52,7 @@ if ($install) {
 
     # Stop TwinCAT Cloud Engineering Agent service
     $serviceName = "TcCloudEngineeringAgent"
-    if (-not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null) {
+    if (-not ((Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null)) {
         $svc = Stop-Service -Name $serviceName
     }
 
@@ -81,7 +81,7 @@ if ($install) {
     }
 
     # Start TwinCAT Cloud Engineering Agent service
-    if (-not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null) {
+    if (-not ((Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null)) {
         $svc = Start-Service -Name $serviceName
     }
 }
