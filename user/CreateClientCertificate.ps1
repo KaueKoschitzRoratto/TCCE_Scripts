@@ -1,17 +1,17 @@
 ﻿param ($DestinationPath='C:\Temp', $Name='ClientCert', $Validity=365, $NoPrompt=$false)
 
-$totalSteps = 5
+$caPath = "C:\CA"
+$caConfig = "openssl_ca.cnf"
+$caCert = "rootCA.pem"
+
+$totalSteps = 4
 
 if (-not (Test-Path -Path $DestinationPath)) {
     New-Item -Path $DestinationPath -ItemType "directory"
 }
 
-$currentStep = 1
-Write-Progress -Activity "Certificate Authority" -Status "Importing global settings" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression -Command "$PSScriptRoot\..\share\GlobalSettings.ps1"
-
 # Generate new private key
-$currentStep = $currentStep + 1
+$currentStep = 1
 Write-Progress -Activity "Certificate Authority" -Status "Creating key" -PercentComplete ($currentStep / $totalSteps * 100)
 Start-Process -Wait -WindowStyle Hidden -FilePath "openssl.exe" -WorkingDirectory $caPath -ArgumentList "genrsa -out $DestinationPath\$Name.key 4096"
 

@@ -1,16 +1,16 @@
 ﻿param ($DestinationPath='C:\Temp', $Name='ClientCert', $Validity=365, $NoPrompt=$false)
 
-$totalSteps = 5
+$caPath = "C:\CA"
+$caConfig = "openssl_ca.cnf"
+$caCert = "rootCA.pem"
+
+$totalSteps = 4
 
 if (-not (Test-Path -Path $DestinationPath)) {
     New-Item -Path $DestinationPath -ItemType "directory"
 }
 
 $currentStep = 1
-Write-Progress -Activity "Create ADSoverMQTT Client" -Status "Importing global settings" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression -Command "$PSScriptRoot\..\share\GlobalSettings.ps1"
-
-$currentStep = $currentStep + 1
 Write-Progress -Activity "Create ADSoverMQTT Client" -Status "Retrieving IP address" -PercentComplete ($currentStep / $totalSteps * 100)
 $ipAddress = Invoke-RestMethod -Method GET -Uri http://169.254.169.254/latest/meta-data/public-ipv4
 if ($ipAddress -eq $null) {
