@@ -19,8 +19,8 @@ $folderPath = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringUaSe
 $description = "TwinCAT Cloud Engineering OPC UA Server"
 $displayName = "TwinCAT Cloud Engineering OPC UA Server"
 
-$username = "Tcce_User_Agent"
-$groupName = "Tcce_Group_Agent"
+$username = "Tcce_User_OpcUa"
+$groupName = "Tcce_Group_OpcUa"
 
 $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
 $password = Scramble-String($password)
