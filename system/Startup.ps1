@@ -30,7 +30,18 @@ else {
 if($init)
 {
     # Total initilization steps for progress bar
-    $progressStepsTotal = 12
+    $progressStepsTotal = 14
+
+    # Set wallpaper
+    $currentStep = $currentStep + 1
+    Write-Progress -Activity "Initialization" -Status "Set wallpaper" -PercentComplete ($currentStep / $progressStepsTotal * 100)
+    Set-ItemProperty -path 'HKCU:\Control Panel\Desktop\' -name Wallpaper -value "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringWallpaper\TcCloudEngineering_1920x1080_16bit.jpg"
+    Set-ItemProperty -path 'HKCU:\Control Panel\Desktop\' -name WallpaperStyle -value "10"
+    rundll32.exe user32.dll, UpdatePerUserSystemParameters
+    rundll32.exe user32.dll, UpdatePerUserSystemParameters
+    rundll32.exe user32.dll, UpdatePerUserSystemParameters
+    rundll32.exe user32.dll, UpdatePerUserSystemParameters
+    rundll32.exe user32.dll, UpdatePerUserSystemParameters
 
     # Warn user about init scripts
     [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected. This requires execution of an initialization script. Do not close the command prompt window. A separate message box will notify you once the init script has finished.",“TwinCAT Cloud Engineering init script“,0)
@@ -68,6 +79,11 @@ if($init)
     Write-Progress -Activity "Initialization" -Status "Initialize TwinCAT Cloud Engineering Agent" -PercentComplete ($currentStep / $progressStepsTotal * 100)
     Invoke-Expression "$PSScriptRoot\..\init\InitializeAgent.ps1"
 
+    # Initialize TwinCAT Cloud Engineering Agent
+    $currentStep = $currentStep + 1
+    Write-Progress -Activity "Initialization" -Status "Initialize TwinCAT Cloud Engineering OPC UA Server" -PercentComplete ($currentStep / $progressStepsTotal * 100)
+    Invoke-Expression "$PSScriptRoot\..\init\InitializeUaServer.ps1"
+
     # Initialize Mosquitto message broker
     $currentStep = $currentStep + 1
     Write-Progress -Activity "Initialization" -Status "Initialize Mosquitto message broker" -PercentComplete ($currentStep / $progressStepsTotal * 100)
@@ -95,7 +111,7 @@ if($init)
 
     # Add Windows Firewall rules
     $currentStep = $currentStep + 1
-    Write-Progress -Activity "Initialization" -Status "Add Firewall rules" -PercentComplete ($currentStep / $totalSteps * 100)
+    Write-Progress -Activity "Initialization" -Status "Add Firewall rules" -PercentComplete ($currentStep / $progressStepsTotal * 100)
     Invoke-Expression "$PSScriptRoot\..\init\AddFirewallRules.ps1"
 
     # Restart Windows

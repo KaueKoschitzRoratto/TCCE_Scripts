@@ -32,7 +32,14 @@ $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.Se
 $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.DNSName = $Hostname
 
 # Change Cert IPAddress
-$xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.IPAddress = $PublicIp.ToString()
+if ($xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.IPAddress -eq $null) {
+    $ipElement = $xmlContent.CreateElement("IPAddress")
+    $ipElement.InnerText = $PublicIp.ToString()
+    $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.AppendChild($ipElement)
+}
+else {
+    $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.IPAddress = $PublicIp.ToString()
+}
 
 # Disable anonymous auth
 $xmlContent.OpcServerConfig.UaServerConfig.UserIdentityTokens.EnableAnonymous = "false"
