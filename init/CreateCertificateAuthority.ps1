@@ -16,6 +16,8 @@ $caCrl = "rootCA.crl"
 # Create directory for CA
 if (-not (Test-Path -Path $caPath)) {
     $dir = New-Item -Path $caPath -ItemType "directory"
+}
+if (-not (Test-Path -Path $caCertsPath)) {
     $dir = New-Item -Path $caCertsPath -ItemType "directory"
 }
 

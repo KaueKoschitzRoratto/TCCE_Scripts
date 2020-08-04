@@ -23,8 +23,7 @@ $folderPath = "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringUaSe
 $description = "TwinCAT Cloud Engineering OPC UA Server"
 $displayName = "TwinCAT Cloud Engineering OPC UA Server"
 
-$username = "Tcce_User_OpcUa"
-$groupName = "Tcce_Group_OpcUa"
+$username = "Tcce_User_OpcUaGtwy"
 
 $password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
 $password = Scramble-String($password)
@@ -36,16 +35,6 @@ if (-not ($account -eq $null)) {
     $rmv = Remove-LocalUser -Name $username
 }
 $usr = New-LocalUser -Name $username -FullName $username -Description "Account for TCCE OPC UA Server" -Password $passwordSec
-$grp = Add-LocalGroupMember -Group $groupName -Member $username
-
-# User account has been created, now create Windows service
-$usernameInclComputername = "$env:computername\$username"
-$psCredentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $usernameInclComputername, $passwordSec
-
-$exeName = "$executable"
-$exePath = "$folderPath\$exeName"
-
-$svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {

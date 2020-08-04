@@ -1,6 +1,22 @@
 param ($Hostname)
 
+Write-Host "Configuring Mosquitto for hostname: $Hostname"
+
+function Get-RandomCharacters($length, $characters) { 
+    $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length } 
+    $private:ofs="" 
+    return [String]$characters[$random]
+}
+
+function Scramble-String([string]$inputString){     
+    $characterArray = $inputString.ToCharArray()   
+    $scrambledStringArray = $characterArray | Get-Random -Count $characterArray.Length     
+    $outputString = -join $scrambledStringArray
+    return $outputString 
+}
+
 $mosquittoPath = "C:\Program Files\mosquitto"
+$executable = "mosquitto.exe"
 $mosquittoConf = "mosquitto.conf"
 $mosquittoServerCert = "mosquitto.pem"
 $mosquittoServerCsr = "mosquitto.csr"
@@ -17,6 +33,9 @@ if (Test-Path -Path "$caPath\$mosquittoServerCert") {
 }
 if (Test-Path -Path "$caPath\$mosquittoServerKey") {
     $rmv = Remove-Item -Recurse -Force "$caPath\$mosquittoServerKey"
+}
+if (Test-Path -Path "$caPath\$mosquittoServerCsr") {
+    $rmv = Remove-Item -Recurse -Force "$caPath\$mosquittoServerCsr"
 }
 
 # Generate new private key
@@ -48,5 +67,31 @@ if (Test-Path -Path "$mosquittoPath\$mosquittoConf") {
 # Create new configuration file
 $file = New-Item -Path "$mosquittoPath\$mosquittoConf" -Value $mosquittoConfContent
 
-# Restart of mosquitto service
-$svc = Restart-Service -Name "mosquitto" -Force
+# Create new user account if it does not exist
+$username = "Tcce_User_Mosquitto"
+$groupName = "Tcce_Group_Mosquitto"
+
+$password = Get-RandomCharacters -length 12 -characters 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!$%&/()=?@#+'
+$password = Scramble-String($password)
+$passwordSec = ConvertTo-SecureString -String $password -AsPlainText -Force
+
+$account = Get-LocalUser -Name $username -ErrorAction SilentlyContinue
+if (-not ($account -eq $null)) {
+    $rmv = Remove-LocalUser -Name $username
+}
+$usr = New-LocalUser -Name $username -FullName $username -Description "Account for Mosquitto service" -Password $passwordSec
+$grp = Add-LocalGroupMember -Group $groupName -Member $username
+
+# User account has been created, now create Windows service
+$username = "$env:computername\$username"
+$psCredentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $passwordSec
+
+$serviceName = "Mosquitto"
+$description = "Mosquitto Message Broker"
+$displayName = "Mosquitto Message Broker"
+
+$exeName = "$executable"
+$exePath = "$folderPath\$exeName run"
+
+# Create Windows Service
+$svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic

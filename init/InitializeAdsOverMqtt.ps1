@@ -1,5 +1,7 @@
 param ($Hostname)
 
+Write-Host "Configuring ADS-over-MQTT for hostname: $Hostname"
+
 $tcSysSrvRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
 $tcSysSrvRoutesName = "AdsOverMqtt.xml"
 $tcSysSrvAdsMqttClientCert = "AdsOverMqtt.pem"
@@ -19,6 +21,9 @@ if (Test-Path -Path "$caPath\$tcSysSrvAdsMqttClientCert") {
 }
 if (Test-Path -Path "$caPath\$tcSysSrvAdsMqttClientKey") {
     $rmv = Remove-Item -Recurse -Force "$caPath\$tcSysSrvAdsMqttClientKey"
+}
+if (Test-Path -Path "$caPath\$tcSysSrvAdsMqttClientCsr") {
+    $rmv = Remove-Item -Recurse -Force "$caPath\$tcSysSrvAdsMqttClientCsr"
 }
 
 # Generate new private key
