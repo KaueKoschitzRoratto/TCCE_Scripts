@@ -91,7 +91,11 @@ $description = "Mosquitto Message Broker"
 $displayName = "Mosquitto Message Broker"
 
 $exeName = "$executable"
-$exePath = "$folderPath\$exeName run"
+$exePath = "$mosquittoPath\$exeName run"
 
 # Create Windows Service
+$svc = Get-Service -Name $serviceName
+if (-not ($svc -eq $null)) {
+    Start-Process -Wait -WindowStyle Hidden -FilePath "sc.exe" -WorkingDirectory $mosquittoPath -ArgumentList "delete $serviceName"
+}
 $svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
