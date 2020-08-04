@@ -93,9 +93,11 @@ $displayName = "Mosquitto Message Broker"
 $exeName = "$executable"
 $exePath = "$mosquittoPath\$exeName run"
 
-# Create Windows Service
+# Create Windows Service. If it already exists then set login credentials
 $svc = Get-Service -Name $serviceName
 if (-not ($svc -eq $null)) {
-    Start-Process -Wait -WindowStyle Hidden -FilePath "sc.exe" -WorkingDirectory $mosquittoPath -ArgumentList "delete $serviceName"
+    Set-Service -Name $serviceName -Credential $psCredentials -Force -Description "Changed"
 }
-$svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
+else {
+    $svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
+}
