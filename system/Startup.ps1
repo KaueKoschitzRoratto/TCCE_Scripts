@@ -46,7 +46,7 @@ if($init)
     rundll32.exe user32.dll, UpdatePerUserSystemParameters
 
     # Warn user about init scripts
-    [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected. This requires execution of an initialization script. Do not close the command prompt window. A separate message box will notify you once the init script has finished.",“TwinCAT Cloud Engineering init script“,0)
+    [System.Windows.Forms.MessageBox]::Show("A new or cloned virtual machine has been detected. This requires execution of an initialization script. Do not close the command prompt window. A separate message box will notify you once the init script has finished.","TwinCAT Cloud Engineering init script",0)
 
     # Create registry keys
     $currentStep = 1
@@ -117,7 +117,7 @@ if($init)
     Invoke-Expression "$PSScriptRoot\..\init\AddFirewallRules.ps1"
 
     # Restart Windows
-    [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...",“TwinCAT Cloud Engineering init script“,0)
+    [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...","TwinCAT Cloud Engineering init script",0)
     Restart-Computer
 }
 
