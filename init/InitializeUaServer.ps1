@@ -44,5 +44,11 @@ $exePath = "$folderPath\$exeName"
 # Install Agent
 Invoke-Expression "$PSScriptRoot\..\user\InstallUpdateUaServer.ps1"
 
-# Create Windows Service
-$svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
+# Create Windows Service with user context LocalSystem
+$svc = New-Service -Name $serviceName -BinaryPathName $exePath -Description $description -DisplayName $displayName -StartupType Automatic
+
+# Start Windows Service, then change user context
+Start-Service -Name $serviceName
+Stop-Service -Name $serviceName
+$svc = Set-Service -Name $serviceName -Credential $psCredentials -Force
+Start-Service -Name $serviceName 

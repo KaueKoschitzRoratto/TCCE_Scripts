@@ -96,7 +96,7 @@ $exePath = "$mosquittoPath\$exeName run"
 # Create Windows Service. If it already exists then set login credentials
 $svc = Get-Service -Name $serviceName
 if (-not ($svc -eq $null)) {
-    Set-Service -Name $serviceName -Credential $psCredentials -Force -Description "Changed"
+    $svc = Set-Service -Name $serviceName -Credential $psCredentials -Force
 }
 else {
     $svc = New-Service -Name $serviceName -BinaryPathName $exePath -Credential $psCredentials -Description $description -DisplayName $displayName -StartupType Automatic
