@@ -113,8 +113,8 @@ if($init)
 
     # Add Windows Firewall rules
     $currentStep = $currentStep + 1
-    Write-Progress -Activity "Initialization" -Status "Add Firewall rules" -PercentComplete ($currentStep / $progressStepsTotal * 100)
-    Invoke-Expression "$PSScriptRoot\..\init\AddFirewallRules.ps1"
+    Write-Progress -Activity "Initialization" -Status "Initialize Firewall rules" -PercentComplete ($currentStep / $progressStepsTotal * 100)
+    Invoke-Expression "$PSScriptRoot\..\init\InitializeFirewallRules.ps1"
 
     # Restart Windows
     [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...","TwinCAT Cloud Engineering init script",0)
