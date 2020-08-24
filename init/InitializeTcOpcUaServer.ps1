@@ -31,6 +31,28 @@ $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.CertificateStore.Certifica
 # Change Cert DNSName
 $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.CertificateStore.CertificateSettings.DNSName = $Hostname
 
+# Add None/None endpoint for Gateway<->Server communication
+$uaEndpoint = $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint
+$secSettings = $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.SecuritySetting
+$secSettingNoneFound = $false
+foreach($secSetting in $secSettings) {
+    if ($secSetting.SecurityPolicy -eq "http://opcfoundation.org/UA/SecurityPolicy#None") {
+        $secSettingNoneFound = $true
+    }
+}
+if (-not($secSettingNoneFound)) {
+        $newSecSetting = $xmlContent.CreateNode("element", "SecuritySetting", "")
+        $newSecPolicy = $xmlContent.CreateNode("element", "SecurityPolicy", "")
+        $newSecPolicy.InnerText = "http://opcfoundation.org/UA/SecurityPolicy#None"
+        $newMsgSecMode = $xmlContent.CreateNode("element", "MessageSecurityMode", "")
+        $newMsgSecMode.InnerText = "None"
+
+        $newSecSetting.AppendChild($newSecPolicy)
+        $newSecSetting.AppendChild($newMsgSecMode)
+        
+        $uaEndpoint.AppendChild($newSecSetting)
+}
+
 # Save config file
 $xmlContent.Save($configPath)
 

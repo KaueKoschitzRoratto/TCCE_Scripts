@@ -61,6 +61,9 @@ if (-not($uaServers -eq $null)) {
         if ($uaServer.Name -eq "TcOpcUaServer") {
             $tcUaServerFound = $true
             $uaServer.Url = "opc.tcp://localhost:4840"
+            # Set SecurityPolicy and MessageSecurityMode
+            $uaServer.SecurityPolicy = "None"
+            $uaServer.MessageSecurityMode = "None"
         }
         if ($uaServer.Name -eq "TcCloudEngineeringUaServer") {
             $tcceUaServerFound = $true
