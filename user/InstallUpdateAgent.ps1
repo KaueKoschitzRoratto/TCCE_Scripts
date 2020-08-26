@@ -82,6 +82,14 @@ if ($install) {
         }
     }
 
+    # On 4022 systems: activate EnableAmsTcpLoopback reg key to make ADS .NET Core library work
+    $regKey = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT3\System"
+    $regKeyAmsLoopbackProp = "EnableAmsTcpLoopback"
+    $prop = Get-ItemProperty -Path $regKey -Name $regKeyAmsLoopbackProp -ErrorAction SilentlyContinue
+    if ($prop -eq $null) {
+        $key = New-ItemProperty -Path $regKey -Name $regKeyAmsLoopbackProp -Value 1
+    }
+
     # Start TwinCAT Cloud Engineering Agent service
     if (-not ((Get-Service -Name $serviceName -ErrorAction SilentlyContinue) -eq $null)) {
         $svc = Start-Service -Name $serviceName
