@@ -12,7 +12,7 @@ $amsNetId = Get-ItemProperty -Path $regKeyTcSystem -Name $regKeyPropertyAmsNetId
 $ipAddrArr = $PublicIp.Split(".")
 
 # Stopping TwinCAT System Service and all dependencies
-$svc = Stop-Service -Name "TcSysSrv"
+$svc = Stop-Service -Name "TcSysSrv" -Force
 
 # Setting new AMS Net ID based on local IP address, the last two bytes from old AMS Net ID are kept
 $amsNetId.AmsNetId[0] = $ipAddrArr[0]
