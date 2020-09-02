@@ -5,7 +5,8 @@ $regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
 $regKeyCloudEng = "TwinCAT Cloud Engineering"
 $regKeyBase = $regKeyBeckhoff + $regKeyCloudEng
 $regKeyPropertyHostname = "Hostname"
-$regKeyPropertyInitScriptsRepo = "InitScriptsRepo"
+$regKeyPropertyPublicIp = "PublicIp"
+$regKeyPropertyInitScriptsRepo = "InitScriptsRepoPath"
 
 $repoPathInitScripts = "C:\git\TCCE_Scripts"
 
@@ -20,6 +21,8 @@ $init = $false
 if (-Not (Test-Path $regKeyBase)) {
     $key = New-Item -Path $regKeyBeckhoff -Name $regKeyCloudEng
     $key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyHostname -Value $hostname
+    $key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyPublicIp -Value $publicIp
+    $key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyInitScriptsRepo -Value $repoPathInitScripts
     $init = $true # reg key does not exist -> new instance -> init
 }
 else {
