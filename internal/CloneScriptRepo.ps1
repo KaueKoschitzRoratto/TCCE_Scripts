@@ -1,7 +1,10 @@
 ﻿# Retrieve user-data to find corresponding repository + branch
 $userData = Invoke-RestMethod -Method GET -Uri http://169.254.169.254/latest/user-data
 $scriptRepo = $userData.Script_Repo
-$scriptBranch = $userData.Image_Version
+$scriptBranch = $userData.Script_Branch
+if ($scriptBranch -eq $null) {
+    $scriptBranch = $userData.Image_Version
+}
 
 $localRepoDir = "C:\git"
 $localScriptsRepoName = "TCCE_Scripts"
