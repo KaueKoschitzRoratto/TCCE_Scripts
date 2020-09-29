@@ -1,13 +1,11 @@
 ﻿param ($Version='latest')
 
-$repoUrl = "https://github.com/SvenGoldstein/Tcce_Agent"
-$repoUrlApi = "https://api.github.com/repos/SvenGoldstein/Tcce_Agent"
-$releaseBinaryName = "TcCloudEngineeringAgent.zip"
+$repoUrl = "https://tcce-downloads.s3.eu-central-1.amazonaws.com/tcceagent/TcCloudEngineeringAgent_" + $Version + ".zip"
+$repoUrlApi = $repoUrl + "?tagging"
 
 # Acquire repository release info - either for a specific version or latest-greatest
-$apiUrl = "$repoUrlApi/releases/$Version"
-$releaseInfo = Invoke-RestMethod -Uri $apiUrl
-$selectedVersion = $releaseInfo.tag_name
+$releaseInfo = Invoke-RestMethod -Uri $repoUrlApi
+$selectedVersion = $releaseInfo.Tagging.TagSet.Tag.Value
 
 # Read currently installed Agent version from Windows Registry and compare with latest version on remote repo
 $regKey = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT Cloud Engineering"
@@ -31,13 +29,12 @@ if (Test-Path $regKey) {
 }
 
 # Only install if latest version on repo is newer or if no Agent has been installed at all
-
 if ($install) {
 
     # Build download URL and temporary target path
-    $downloadUrl = "$repoUrl/releases/download/$selectedVersion/$releaseBinaryName"
+    $downloadUrl = $repoUrl
     $tempDirectory = "C:\Temp"
-    $tempFile = "$tempDirectory\$releaseBinaryName"
+    $tempFile = "$tempDirectory\TcCloudEngineeringAgent_" + $Version + ".zip"
 
     if (-not(Test-Path $tempDirectory)) {
         $dir = New-Item -Path $tempDirectory -ItemType "directory"
