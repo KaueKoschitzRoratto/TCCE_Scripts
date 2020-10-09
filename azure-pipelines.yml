@@ -10,12 +10,6 @@ pool:
   name : 'TwinCAT-Builds'
 
 
-  demands:
-
-
-  - Agent.name -equals tc-dotest03
-
-
 steps:
 
 
