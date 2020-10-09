@@ -19,16 +19,12 @@ pool:
 steps:
 
 
-- bash: |
 
 
-    git push --prune https://github.com/VishalJadav/TCCE_Scripts.git \
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: git push --prune https://github.com/VishalJadav/TCCE_Scripts.git \
 
 
-        +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/*
-
-
-  displayName: 'Copy to Github'
-
-
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+        +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/* -eq(variables['Build.SourceBranch'], 'refs/heads/master')
