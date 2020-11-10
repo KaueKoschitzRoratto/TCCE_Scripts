@@ -7,16 +7,10 @@ The following user credentials have been created to access the TwinCAT OPC UA Ga
     Password: %passwordOpcUa%
 Please store these credentials in a save location and delete this file.
 
-The following user credentials have been created to access the SSH Server via SFTP for file transfer.
+The following user credentials have been created to access the SSH Server via SFTP and Remote Shell.
     SSH endpoint: %publicIp%
     Username: %usernameSsh%
     Password: %passwordSsh%
-Please store these credentials in a save location and delete this file.
-
-The following user credentials have been created to access the SSH Server via shell.
-    SSH endpoint: %publicIp%
-    Username: %usernameSshAdmin%
-    Password: %passwordSshAdmin%
 Please store these credentials in a save location and delete this file.
 
 The following user credentials have been created to allow the creation of ADS Routes to this system.
