@@ -1,7 +1,5 @@
 param ($Hostname)
 
-Write-Host "Configuring ADS-over-MQTT for hostname: $Hostname"
-
 $tcSysSrvRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
 $tcSysSrvRoutesName = "AdsOverMqtt.xml"
 $tcSysSrvAdsMqttClientCert = "AdsOverMqtt.pem"
