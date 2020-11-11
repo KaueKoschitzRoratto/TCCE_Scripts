@@ -1,7 +1,5 @@
 param ($Hostname)
 
-Write-Host "Configuring Mosquitto for hostname: $Hostname"
-
 function Get-RandomCharacters($length, $characters) { 
     $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length } 
     $private:ofs="" 
