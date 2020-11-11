@@ -12,9 +12,7 @@ $repoPathInitScripts = "C:\git\TCCE_Scripts"
 
 # IMDSv1 - Retrieve public hostname of instance and store in registry to detect if InitScript needs to run again (Clone)
 $hostname = Invoke-RestMethod -Method GET -Uri http://169.254.169.254/latest/meta-data/public-hostname
-Write-Host "Detected hostname: $hostname"
 $publicIp = Invoke-RestMethod -Method GET -Uri http://169.254.169.254/latest/meta-data/public-ipv4
-Write-Host "Detected public IP: $publicIp"
 
 # Check if initialization has to be started (new or cloned instance)
 $init = $false
