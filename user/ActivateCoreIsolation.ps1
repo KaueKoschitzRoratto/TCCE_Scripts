@@ -1,7 +1,7 @@
 param ($NoPrompt=$false)
 
 # This script isolates one CPU core
-$proc = Get-WmiObject -class Win32_processor
+$proc = Get-CimInstance -class Win32_processor
 $logicalProcessors = $proc.NumberOfLogicalProcessors
 $logicalProcessorsNew = $logicalProcessors - 1
 Start-Process -Wait -WindowStyle Hidden -FilePath "bcdedit" -ArgumentList "/set numproc $logicalProcessorsNew"
