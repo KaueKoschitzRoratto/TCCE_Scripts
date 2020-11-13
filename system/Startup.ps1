@@ -33,7 +33,7 @@ else {
 if($init)
 {
     # Total initilization steps for progress bar
-    $progressStepsTotal = 15
+    $progressStepsTotal = 16
 
     # Set wallpaper
     $currentStep = $currentStep + 1
@@ -120,10 +120,12 @@ if($init)
 	# Isolating one logical core
     $currentStep = $currentStep + 1
     Write-Progress -Activity "Initialization" -Status "Isolating logical CPU core" -PercentComplete ($currentStep / $progressStepsTotal * 100)
-	$proc = Get-WmiObject -class Win32_processor
-	$logicalProcessors = $proc.NumberOfLogicalProcessors
-	$logicalProcessorsNew = $logicalProcessors - 1
-	Start-Process -Wait -WindowStyle Hidden -FilePath "bcdedit" -ArgumentList "/set numproc $logicalProcessorsNew"
+	Invoke-Expression "$PSScriptRoot\..\user\ActivateCoreIsolation.ps1 -NoPrompt $true"
+
+	# Installing code directory on desktop
+    $currentStep = $currentStep + 1
+    Write-Progress -Activity "Initialization" -Status "Installing code directory on desktop" -PercentComplete ($currentStep / $progressStepsTotal * 100)
+	Invoke-Expression "$PSScriptRoot\..\init\CopyCodeDir.ps1"
 	
     # Restart Windows
     [System.Windows.Forms.MessageBox]::Show("Windows will be restarted now to finish the initialization script...","TwinCAT Cloud Engineering init script",0)
