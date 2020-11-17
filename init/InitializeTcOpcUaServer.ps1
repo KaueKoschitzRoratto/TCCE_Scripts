@@ -5,7 +5,7 @@ $serverUrl = "opc.tcp://" + $Hostname + ":4840"
 
 $tcdir = Get-Childitem env:twincat3dir
 $tcdirarray = $tcdir.Value.Split('\')
-$tcInstallDir = $tcdirarray[0]+"\"+$tcdirarray[1]
+$tcInstallDir = $tcdirarray[0]+"\"+$tcdirarray[1]+"\"+$tcdirarray[2]
 $tcFunctionsInstallDir = $tcInstallDir + "\Functions"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Server"
