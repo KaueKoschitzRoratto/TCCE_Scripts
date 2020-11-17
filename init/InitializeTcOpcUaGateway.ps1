@@ -3,7 +3,9 @@ param ($Hostname, $PublicIp)
 $serverName = "TcOpcUaGateway@" + $PublicIp.ToString()
 $serverUrl = "opc.tcp://" + $Hostname + ":48050"
 
-$tcInstallDir = "C:\TwinCAT"
+$tcdir = Get-Childitem env:twincat3dir
+$tcdirarray = $tcdir.Value.Split('\')
+$tcInstallDir = $tcdirarray[0]+"\"+$tcdirarray[1]
 $tcFunctionsInstallDir = $tcInstallDir + "\Functions"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Gateway"
@@ -20,7 +22,9 @@ $xmlContent.OpcServerConfig.UaServerConfig.ServerName = $serverName
 
 # Change ServerUrl and StackUrl
 $xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.Url = $serverUrl
-#$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.StackUrl = $serverUrl
+
+# Set AutomaticallyTrustAllClientCertificates to false
+$xmlContent.OpcServerConfig.UaServerConfig.UaEndpoint.AutomaticallyTrustAllClientCertificates = "false"
 
 # Change Cert CommonName
 $xmlContent.OpcServerConfig.UaServerConfig.DefaultApplicationCertificateStore.ServerCertificate.CertificateSettings.CommonName = $PublicIp.ToString()
