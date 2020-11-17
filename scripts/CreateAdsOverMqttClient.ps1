@@ -19,11 +19,11 @@ if ($ipAddress -eq $null) {
 
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Create ADSoverMQTT Client" -Status "Creating client certificate" -PercentComplete ($currentStep / $totalSteps * 100)
-Invoke-Expression -Command "$PSScriptRoot\CreateClientCertificate.ps1 -DestinationPath $DestinationPath -Name $Name -Validity $Validity -NoPrompt $true"
+Invoke-Expression -Command "& '$PSScriptRoot\CreateClientCertificate.ps1' -DestinationPath $DestinationPath -Name $Name -Validity $Validity -NoPrompt $true"
 
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Create ADSoverMQTT Client" -Status "Copying ADSoverMQTT configuration file" -PercentComplete ($currentStep / $totalSteps * 100)
-Copy-Item -Path "$PSScriptRoot\..\configs\AdsOverMqtt.xml" -Destination "$DestinationPath\AdsOverMqtt.xml"
+Copy-Item -Path "$PSScriptRoot\..\templates\AdsOverMqtt.xml" -Destination "$DestinationPath\AdsOverMqtt.xml"
 
 $currentStep = $currentStep + 1
 Write-Progress -Activity "Create ADSoverMQTT Client" -Status "Modifying ADSoverMQTT configuration file" -PercentComplete ($currentStep / $totalSteps * 100)

@@ -8,24 +8,29 @@ $releaseInfo = Invoke-RestMethod -Uri $repoUrlApi
 $selectedVersion = $releaseInfo.Tagging.TagSet.Tag.Value
 
 # Read currently installed Agent version from Windows Registry and compare with latest version on remote repo
-$regKey = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT Cloud Engineering"
+$regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
+$regKeyCloudEng = "TwinCAT Cloud Engineering"
 $regKeyAgentProp = "AgentVersion"
 $install = $false
-if (Test-Path $regKey) {
-    $installedVersion = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp -ErrorAction SilentlyContinue
-    if (-not ($installedVersion -eq $null)) {
-        # Existing Agent installation found -> check if latest version on remote repo is newer
-        $selectedVersionObj = [version]$selectedVersion
-        $installedVersionObj = [version]$installedVersion.AgentVersion
-        if ($selectedVersionObj -gt $installedVersionObj) {
-            # Latest release version is newer -> install
-            $install = $true
-        }
-    }
-    else {
-        # No Agent has been installed -> install
-        $install = $true
-    }
+
+$regKeyExists = Test-Path $regKeyBeckhoff$regKeyCloudEng
+if (-not $regKeyExists) {
+    $key = New-Item -Path $regKeyBeckhoff -Name $regKeyCloudEng -ErrorAction SilentlyContinue
+}
+
+$installedVersion = Get-ItemProperty -Path $regKeyCloudEng -Name $regKeyAgentProp -ErrorAction SilentlyContinue
+if (-not ($installedVersion -eq $null)) {
+	# Existing Agent installation found -> check if latest version on remote repo is newer
+	$selectedVersionObj = [version]$selectedVersion
+	$installedVersionObj = [version]$installedVersion.AgentVersion
+	if ($selectedVersionObj -gt $installedVersionObj) {
+		# Latest release version is newer -> install
+		$install = $true
+	}
+}
+else {
+	# No Agent has been installed -> install
+	$install = $true
 }
 
 # Only install if latest version on repo is newer or if no Agent has been installed at all
@@ -68,23 +73,23 @@ if ($install) {
     $zip = Expand-Archive -Path $tempFile $agentDirectory
 
     # Write installed Agent version to Windows Registry
-    if (Test-Path $regKey) {
-        $prop = Get-ItemProperty -Path $regKey -Name $regKeyAgentProp -ErrorAction SilentlyContinue
+    if (Test-Path $regKeyCloudEng) {
+        $prop = Get-ItemProperty -Path $regKeyCloudEng -Name $regKeyAgentProp -ErrorAction SilentlyContinue
         if ($prop -eq $null) {
-            $key = New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
+            $key = New-ItemProperty -Path $regKeyCloudEng -Name $regKeyAgentProp -Value $selectedVersion
         }
         else {
-            $rmv = Remove-ItemProperty -Path $regKey -Name $regKeyAgentProp
-            $key = New-ItemProperty -Path $regKey -Name $regKeyAgentProp -Value $selectedVersion
+            $rmv = Remove-ItemProperty -Path $regKeyCloudEng -Name $regKeyAgentProp
+            $key = New-ItemProperty -Path $regKeyCloudEng -Name $regKeyAgentProp -Value $selectedVersion
         }
     }
 
     # On 4022 systems: activate EnableAmsTcpLoopback reg key to make ADS .NET Core library work
-    $regKey = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT3\System"
+    $regKeyCloudEng = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\TwinCAT3\System"
     $regKeyAmsLoopbackProp = "EnableAmsTcpLoopback"
-    $prop = Get-ItemProperty -Path $regKey -Name $regKeyAmsLoopbackProp -ErrorAction SilentlyContinue
+    $prop = Get-ItemProperty -Path $regKeyCloudEng -Name $regKeyAmsLoopbackProp -ErrorAction SilentlyContinue
     if ($prop -eq $null) {
-        $key = New-ItemProperty -Path $regKey -Name $regKeyAmsLoopbackProp -Value 1
+        $key = New-ItemProperty -Path $regKeyCloudEng -Name $regKeyAmsLoopbackProp -Value 1
     }
 
     # Start TwinCAT Cloud Engineering Agent service

@@ -4,8 +4,6 @@ $regKeyBase = $regKeyBeckhoff + $regKeyCloudEng
 $regKeyPropertyCaPath = "CaPath"
 $regKeyPropertyCaCertsPath = "CaCertsPath"
 
-$repoPathInitScripts = "C:\git\TCCE_Scripts"
-
 $caPath = "C:\CA"
 $caCertsPath = $caPath + "\certs"
 $caConfig = "openssl_ca.cnf"
@@ -22,10 +20,10 @@ if (-not (Test-Path -Path $caCertsPath)) {
 }
 
 # Copy template files
-$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\openssl_ca.cnf" -Destination $caPath
-$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\index.txt" -Destination $caPath
-$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\crlnumber" -Destination $caPath
-$cpy = Copy-Item -Path "$repoPathInitScripts\templates\ca\serial" -Destination $caPath
+$cpy = Copy-Item -Path "$PSScriptRoot\..\templates\ca\openssl_ca.cnf" -Destination $caPath
+$cpy = Copy-Item -Path "$PSScriptRoot\..\templates\ca\index.txt" -Destination $caPath
+$cpy = Copy-Item -Path "$PSScriptRoot\..\templates\ca\crlnumber" -Destination $caPath
+$cpy = Copy-Item -Path "$PSScriptRoot\..\templates\ca\serial" -Destination $caPath
 
 # Create registry property to store CA paths
 $key = New-ItemProperty -Path $regKeyBase -Name $regKeyPropertyCaPath -Value $caPath

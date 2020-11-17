@@ -1,0 +1,1 @@
+"C:\Program Files\PowerShell\7\pwsh.exe" -File "C:\Program Files (x86)\Beckhoff Automation\TcCloudEngineeringMisc\Start.ps1"

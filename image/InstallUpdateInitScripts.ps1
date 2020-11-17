@@ -10,16 +10,15 @@ $selectedVersion = $releaseInfo.Tagging.TagSet.Tag.Value
 # Read currently installed Agent version from Windows Registry and compare with latest version on remote repo
 $regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
 $regKeyCloudEng = "TwinCAT Cloud Engineering"
-$regKeyCloudEngFull = $regKeyBeckhoff + $regKeyCloudEng
 $regKeyInitScriptsProp = "InitScriptsVersion"
 $install = $false
 
-$regKeyExists = Test-Path $regKeyCloudEngFull
+$regKeyExists = Test-Path $regKeyBeckhoff$regKeyCloudEng
 if (-not $regKeyExists) {
     $key = New-Item -Path $regKeyBeckhoff -Name $regKeyCloudEng
 }
 
-$installedVersion = Get-ItemProperty -Path $regKeyCloudEngFull -Name $regKeyInitScriptsProp -ErrorAction SilentlyContinue
+$installedVersion = Get-ItemProperty -Path $regKeyCloudEng -Name $regKeyInitScriptsProp -ErrorAction SilentlyContinue
 if (-not ($installedVersion -eq $null)) {
 	# Existing Agent installation found -> check if latest version on remote repo is newer
 	$selectedVersionObj = [version]$selectedVersion
@@ -73,14 +72,14 @@ if ($install) {
     $zip = Expand-Archive -Path $tempFile $scriptsDirectory
 
     # Write installed scripts version to Windows Registry
-    if (Test-Path $regKeyCloudEngFull) {
-        $prop = Get-ItemProperty -Path $regKeyCloudEngFull -Name $regKeyInitScriptsProp -ErrorAction SilentlyContinue
+    if (Test-Path $regKeyCloudEng) {
+        $prop = Get-ItemProperty -Path $regKeyCloudEng -Name $regKeyInitScriptsProp -ErrorAction SilentlyContinue
         if ($prop -eq $null) {
-            $key = New-ItemProperty -Path $regKeyCloudEngFull -Name $regKeyInitScriptsProp -Value $selectedVersion
+            $key = New-ItemProperty -Path $regKeyCloudEng -Name $regKeyInitScriptsProp -Value $selectedVersion
         }
         else {
-            $rmv = Remove-ItemProperty -Path $regKeyCloudEngFull -Name $regKeyInitScriptsProp
-            $key = New-ItemProperty -Path $regKeyCloudEngFull -Name $regKeyInitScriptsProp -Value $selectedVersion
+            $rmv = Remove-ItemProperty -Path $regKeyCloudEng -Name $regKeyInitScriptsProp
+            $key = New-ItemProperty -Path $regKeyCloudEng -Name $regKeyInitScriptsProp -Value $selectedVersion
         }
     }
 }

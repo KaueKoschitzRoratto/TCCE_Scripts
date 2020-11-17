@@ -1,12 +1,12 @@
 param ($Hostname)
 
-$tcSysSrvRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
+$tcdir = Get-Childitem env:twincat3dir
+$tcSysSrvRoutesPath = $tcdir.Value+"Target\Routes"
 $tcSysSrvRoutesName = "AdsOverMqtt.xml"
 $tcSysSrvAdsMqttClientCert = "AdsOverMqtt.pem"
 $tcSysSrvAdsMqttClientCsr = "AdsOverMqtt.csr"
 $tcSysSrvAdsMqttClientKey = "AdsOverMqtt.key"
 
-$repoPathInitScripts = "C:\git\TCCE_Scripts"
 $templateRoutesFile = "AdsOverMqtt.xml"
 
 $caPath = "C:\CA"
@@ -44,7 +44,7 @@ if (Test-Path -Path "$tcSysSrvRoutesPath\$tcSysSrvRoutesName") {
 
 # Create new routes file for ADS-over-MQTT
 if (-not (Test-Path -Path "$tcSysSrvRoutesPath\$templateRoutesFile")) {
-  $cpy = Copy-Item -Path "$repoPathInitScripts\templates\$templateRoutesFile" -Destination "$tcSysSrvRoutesPath\$templateRoutesFile"
+  $cpy = Copy-Item -Path "$PSScriptRoot\..\templates\$templateRoutesFile" -Destination "$tcSysSrvRoutesPath\$templateRoutesFile"
 }
 $routesContent = Get-Content -Path "$tcSysSrvRoutesPath\$templateRoutesFile" -Raw
 $routesContent = $routesContent.Replace("%hostname%", $Hostname)

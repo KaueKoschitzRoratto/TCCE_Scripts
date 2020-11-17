@@ -3,8 +3,6 @@ param ($PublicIp)
 $templateReadmePath = "C:\Users\Administrator\Desktop"
 $templateReadmeFile = "readme.txt"
 
-$repoPathInitScripts = "C:\git\TCCE_Scripts"
-
 function Get-RandomCharacters($length, $characters) { 
     $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length } 
     $private:ofs="" 
@@ -35,7 +33,7 @@ $grp = Add-LocalGroupMember -Group $groupName -Member $username
 
 # Store created user credentials on user's desktop as temporary note
 if (-not (Test-Path -Path "$templateReadmePath\$templateReadmeFile")) {
-  $cpy = Copy-Item -Path "$repoPathInitScripts\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
+  $cpy = Copy-Item -Path "$PSScriptRoot\..\templates\$templateReadmeFile" -Destination "$templateReadmePath\$templateReadmeFile"
 }
 $readmeContent = Get-Content -Path "$templateReadmePath\$templateReadmeFile" -Raw
 $readmeContent = $readmeContent.Replace("%publicIp%", $PublicIp)
