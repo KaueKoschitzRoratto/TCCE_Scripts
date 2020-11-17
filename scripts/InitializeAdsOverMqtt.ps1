@@ -47,7 +47,7 @@ if (-not (Test-Path -Path "$tcSysSrvRoutesPath\$templateRoutesFile")) {
   $cpy = Copy-Item -Path "$PSScriptRoot\..\templates\$templateRoutesFile" -Destination "$tcSysSrvRoutesPath\$templateRoutesFile"
 }
 $routesContent = Get-Content -Path "$tcSysSrvRoutesPath\$templateRoutesFile" -Raw
-$routesContent = $routesContent.Replace("%hostname%", $Hostname)
+$routesContent = $routesContent.Replace("%hostname%", "127.0.0.1")
 $routesContent = $routesContent.Replace("%port%", "8883")
 $routesContent = $routesContent.Replace("%caCertPath%", "$caPath\$caCert")
 $routesContent = $routesContent.Replace("%clientCertPath%", "$caPath\$tcSysSrvAdsMqttClientCert")
