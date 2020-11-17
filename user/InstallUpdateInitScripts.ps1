@@ -10,7 +10,7 @@ $selectedVersion = $releaseInfo.Tagging.TagSet.Tag.Value
 # Read currently installed Agent version from Windows Registry and compare with latest version on remote repo
 $regKeyBeckhoff = "HKLM:\SOFTWARE\WOW6432Node\Beckhoff\"
 $regKeyCloudEng = "TwinCAT Cloud Engineering"
-$regKeyCloudEngFull = $regKeyBeckhoff$regKeyCloudEng
+$regKeyCloudEngFull = $regKeyBeckhoff + $regKeyCloudEng
 $regKeyInitScriptsProp = "InitScriptsVersion"
 $install = $false
 
