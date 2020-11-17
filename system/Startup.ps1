@@ -137,3 +137,6 @@ Invoke-Expression "$PSScriptRoot\..\user\InstallUpdateAgent.ps1"
 
 # Start TCCE OPC UA Server update
 Invoke-Expression "$PSScriptRoot\..\user\InstallUpdateUaServer.ps1"
+
+# Install new init script location
+Invoke-Expression "$PSScriptRoot\..\user\InstallUpdateInitScripts.ps1"
