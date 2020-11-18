@@ -1,6 +1,13 @@
 param ($Hostname)
 
-$tcSysSrvRoutesPath = "C:\TwinCAT\3.1\Target\Routes"
+$tcdir = Get-Childitem env:twincat3dir
+$tcdirarray = $tcdir.Value.Split('\')
+
+For($i = 0; $i -lt $tcdirarray.Length-2; $i++) {
+	$tcInstallDir = $tcInstallDir+$tcdirarray[$i]+"\"
+}
+
+$tcSysSrvRoutesPath = $tcInstallDir+"3.1\Target\Routes"
 $tcSysSrvRoutesName = "AdsOverMqtt.xml"
 $tcSysSrvAdsMqttClientCert = "AdsOverMqtt.pem"
 $tcSysSrvAdsMqttClientCsr = "AdsOverMqtt.csr"
