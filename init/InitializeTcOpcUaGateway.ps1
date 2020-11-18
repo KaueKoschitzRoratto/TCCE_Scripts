@@ -5,8 +5,12 @@ $serverUrl = "opc.tcp://" + $Hostname + ":48050"
 
 $tcdir = Get-Childitem env:twincat3dir
 $tcdirarray = $tcdir.Value.Split('\')
-$tcInstallDir = $tcdirarray[0]+"\"+$tcdirarray[1]+"\"+$tcdirarray[2]
-$tcFunctionsInstallDir = $tcInstallDir + "\Functions"
+
+For($i = 0; $i -lt $tcdirarray.Length-2; $i++) {
+	$tcInstallDir = $tcInstallDir+$tcdirarray[$i]+"\"
+}
+
+$tcFunctionsInstallDir = $tcInstallDir + "Functions"
 
 $baseInstallPath = $tcFunctionsInstallDir + "\TF6100-OPC-UA\Win32\Gateway"
 $configPath = $baseInstallPath + "\bin\uagateway.config.xml"
